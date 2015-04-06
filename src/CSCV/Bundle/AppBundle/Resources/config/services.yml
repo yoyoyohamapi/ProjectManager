@@ -1,0 +1,7 @@
+services:
+    cscv_app_bundle.product.form.type:
+        class: CSCV\Bundle\AppBundle\Form\Type\ProductType
+        arguments: [@service_container]
+        scope: request
+        tags:
+            - { name: form.type, alias: product }

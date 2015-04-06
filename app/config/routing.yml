@@ -1,0 +1,15 @@
+cscv_app:
+    resource: "@CSCVAppBundle/Resources/config/routing.yml"
+    prefix:   /
+
+cscvrest:
+    resource: "@CSCVRESTBundle/Resources/config/routing.yml"
+    prefix:   /
+
+acme_store:
+    resource: "@AcmeStoreBundle/Resources/config/routing.yml"
+    prefix:   /
+
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation

@@ -1,0 +1,12 @@
+cscvrest_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: CSCVRESTBundle:Default:index }
+
+cscv_rest_products:
+    resource: CSCV\Bundle\RESTBundle\Controller\ProductController
+    prefix: /api
+    type: rest
+
+NelmioApiDocBundle:
+    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+    prefix:   /api/doc

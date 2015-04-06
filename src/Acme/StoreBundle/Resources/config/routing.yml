@@ -1,0 +1,35 @@
+# 显示所有商品
+acme_store_homepage:
+    path:     /store/
+    defaults: { _controller: AcmeStoreBundle:Default:index }
+
+# 创建商品
+acme_store_create:
+    path:    /store/create
+    defaults: { _controller:AcmeStoreBundle:Default:create }
+    methods: [POST]
+
+# 至创建商品页面
+acme_store_new:
+    path:    /store/new
+    defaults: { _controller:AcmeStoreBundle:Default:new }
+
+# 显示商品
+acme_store_show:
+    path:   /store/show/{id}
+    defaults: { _controller:AcmeStoreBundle:Default:show }
+
+# 编辑商品
+acme_store_edit:
+    path:    /store/edit/{id}
+    defaults: { _controller:AcmeStoreBundle:Default:edit }
+
+# 更新商品
+acme_store_update:
+    path:  /store/update/{id}
+    defaults: { _controller:AcmeStoreBundle:Default:update }
+
+#删除商品
+acme_store_delete:
+    path:  /store/delete/{id}
+    defaults: { _controller:AcmeStoreBundle:Default:delete}
