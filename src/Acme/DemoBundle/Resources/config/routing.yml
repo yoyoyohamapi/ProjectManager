@@ -2,6 +2,14 @@ _welcome:
     path:     /
     defaults: { _controller: AcmeDemoBundle:Welcome:index }
 
+_hello:
+    path:    /demo/hello
+    defaults: { _controller: AcmeDemoBundle:Demo:hello}
+
+_sea:
+    path:   /demo/sea
+    defaults: { _controller: AcmeDemoBundle:Demo:sea }
+
 _demo_secured:
     resource: "@AcmeDemoBundle/Controller/SecuredController.php"
     type:     annotation

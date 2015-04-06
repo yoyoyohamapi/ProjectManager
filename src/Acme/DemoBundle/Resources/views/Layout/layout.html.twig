@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    {% block stylesheets %}
+    {% endblock %}
+</head>
+<body>
+<div id="bodyWrapper">
+    {% block content %}{% endblock %}
+    {% include "AcmeDemoBundle:Layout:scripts.html.twig" %}
+</div>
+</body>
+</html>

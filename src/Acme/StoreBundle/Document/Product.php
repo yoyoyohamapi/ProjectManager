@@ -3,6 +3,7 @@ namespace Acme\StoreBundle\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use JMS\Serializer\Annotation as JMS;
+use JMS\Serializer\Annotation\Expose;
 
 /**
  * @MongoDB\Document
@@ -17,7 +18,6 @@ class Product
 
     /**
      * @MongoDB\Id
-     *
      * @Expose
      * @JMS\Type("string")
      */

@@ -1,3 +1,7 @@
 cscv_app_homepage:
     path:     /hello/{name}
     defaults: { _controller: CSCVAppBundle:Default:index }
+
+cscv_app_test_sea:
+    path:    /test/sea
+    defaults: { _controller:CSCVAppBundle:Test:sea }

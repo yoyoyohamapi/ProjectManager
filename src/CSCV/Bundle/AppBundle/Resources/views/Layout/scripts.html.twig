@@ -1,0 +1,11 @@
+<script>
+    var app = {};
+    {% if script_action is defined %}
+    app.action = '{{ script_action }}';
+    {% endif %}
+</script>
+<script src="{{ asset('assets/libs/seajs/2.3.0/sea.js') }}"></script>
+<script src="{{ asset('assets/libs/sea-config.js') }}"></script>
+<script>
+    seajs.use("{{asset('bundles/cscvapp/module/app.js')}}");
+</script>
