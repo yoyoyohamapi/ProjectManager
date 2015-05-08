@@ -1,1 +1,8 @@
-Hello {{ name }}!
+{% extends '@CSCVApp/Layout/layout.html.twig' %}
+{% block title %}欢迎{% endblock %}
+
+{% block content %}
+    <div class="ui one column stackable center aligned page grid" style="padding: 200px">
+        <button class="button ui"><a href="{{ path('cscv_app_image_post_index') }}">上传图像</a></button>
+    </div>
+{% endblock %}

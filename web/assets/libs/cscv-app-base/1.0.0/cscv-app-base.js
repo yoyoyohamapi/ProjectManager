@@ -1,5 +1,6 @@
 define(function (require, exports, module) {
+    var Base = require('./Base.js');
     exports.run = function () {
-        alert(1);
+        var base = new Base();
     }
 });

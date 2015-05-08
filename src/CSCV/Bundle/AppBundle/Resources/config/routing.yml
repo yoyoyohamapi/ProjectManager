@@ -1,6 +1,26 @@
 cscv_app_homepage:
-    path:     /hello/{name}
+    path:     /index
     defaults: { _controller: CSCVAppBundle:Default:index }
+
+# 图像标定主页
+cscv_app_image_index:
+    path:    /image
+    defaults: { _controller: CSCVAppBundle:Image:index }
+
+# 图像上传
+cscv_app_image_upload:
+    path:   /image/upload
+    defaults: { _controller: CSCVAppBundle:Image:upload }
+    methods: [POST]
+
+# 标定图像
+cscv_app_image_post:
+    path: /image/post
+    defaults: { _controller: CSCVAppBundle:Image:post }
+
+cscv_app_image_find:
+    path: /image/find/{imageName}
+    defaults: { _controller: CSCVAppBundle:Image:find }
 
 cscv_app_test_sea:
     path:    /test/sea

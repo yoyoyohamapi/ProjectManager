@@ -77,7 +77,6 @@ class ProductController extends Controller
      *     input="product",
      *     output="Acme\StoreBundle\Document\Product"
      * )
-     * @param $id 更新商品号
      * @return mixed
      */
     public function postProductAction(Request $request)

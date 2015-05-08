@@ -2,13 +2,13 @@
 
 namespace CSCV\Bundle\AppBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class DefaultController extends Controller
+class DefaultController extends BaseController
 {
-    public function indexAction($name)
+    public function indexAction()
     {
-        return $this->render('CSCVAppBundle:Default:index.html.twig', array('name' => $name));
+        return $this->render('CSCVAppBundle:Default:index.html.twig');
     }
+
 
 }

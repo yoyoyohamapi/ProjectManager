@@ -24,7 +24,8 @@ class AppKernel extends Kernel
             new JMS\SerializerBundle\JMSSerializerBundle(),
             new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
             new CSCV\Bundle\AppBundle\CSCVAppBundle(),
-            //new FOS\UserBundle\FOSUserBundle(),
+            new FOS\UserBundle\FOSUserBundle(),
+            new CSCV\Bundle\StorageBundle\CSCVStorageBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

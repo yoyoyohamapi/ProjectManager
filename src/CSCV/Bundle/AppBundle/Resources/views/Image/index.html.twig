@@ -1,0 +1,71 @@
+{% extends '@CSCVApp/Layout/layout.html.twig' %}
+{% block title %}图像上传{% endblock %}
+{% block content %}
+    <div class="ui one column stackable center aligned page grid">
+        <div class="ten wide column">
+            <div id="calibrate">
+                <button id="showSelectDialog" class="ui button massive pink">
+                    <i class="icon camera retro"></i>
+                    上传文件
+                </button>
+                <div id="progress" class="ui large progress" style="margin:0 0 0 0;display: none">
+                    <div class="bar">
+                        <div class="progress"></div>
+                    </div>
+                </div>
+                <div id="card" class="ui card"
+                     style="margin: 0 auto;width:450px;text-align: left;display: none;margin-top: -100px;">
+                    <a class="image" href="#">
+                        <img id="preview" src="">
+                    </a>
+
+                    <div class="content">
+                        {# 是否剪裁 #}
+                        <div class="ui toggle checkbox" id="croppedHolder">
+                            <input type="checkbox" name="croppedHolder">
+                            <label>是否剪裁</label>
+                        </div>
+                        <div class="ui divider"></div>
+                        {# 疾病选择 #}
+                        <h2 class="header">病种选择</h2>
+
+                        <div class="ui horizontal list buttonList" id="diseaseList">
+                        </div>
+                        <div class="ui divider"></div>
+                        {# 部位选择 #}
+                        <h2 class="header">部位选择</h2>
+
+                        <div class="ui horizontal list buttonList" id="locationList">
+                        </div>
+                        <div class="ui divider"></div>
+                        {# 标定结果 #}
+                        <h2 class="header">标定结果</h2>
+                        <a id="croppedTag" class="ui tag label">是否剪裁</a>
+                        <a id="diseaseTag" class="ui red tag label">疾病类型</a>
+                        <a id="locationTag" class="ui teal tag label">发病部位</a>
+                    </div>
+                    <div id="submit" class="ui bottom attached purple button">
+                        <i class="pin icon"></i>
+                        标定
+                    </div>
+                    <div id="calibrateProgress" class="ui bottom attached yellow progress">
+                        <div class="bar"></div>
+                    </div>
+                </div>
+                <input style="display:none" id="fileupload" type="file" name="files[]"
+                       data-url="{{ path('cscv_app_image_upload') }}" multiple>
+
+                <div id="formContainer" style="display: none">
+                    {{ form_start(form) }}
+                    {{ form_widget(form) }}
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {% set script_action='image/index' %}
+    {{ parent() }}
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends '@CSCVApp/Layout/layout.html.twig' %}
+{% block content %}
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button id="submit" type="button">提交</button>
+    {{ form_end(form) }}
+{% endblock %}
+{% block scripts %}
+    {% set script_action='image/post' %}
+    {{ parent() }}
+{% endblock %}

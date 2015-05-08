@@ -1,4 +1,7 @@
 services:
-#    cscvrest.example:
-#        class: CSCV\Bundle\RESTBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    cscv_storage_bundle.image.form.type:
+        class: CSCV\Bundle\StorageBundle\Form\Type\ImageType
+        arguments: [@service_container]
+        scope: request
+        tags:
+            - { name: form.type, alias: image }

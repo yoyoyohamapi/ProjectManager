@@ -127,4 +127,8 @@ fos_rest:
 #API doc
 nelmio_api_doc: ~
 
-#JMS Serializer
+# FOSUserBundle Config
+fos_user:
+    db_driver: mongodb
+    firewall_name: main
+    user_class: CSCV\Bundle\StorageBundle\Document\User
