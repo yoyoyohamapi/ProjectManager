@@ -1,0 +1,52 @@
+<form class="ui form" action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST"
+      class="fos_user_registration_register">
+    <h1 class="ui horizontal header divider">欢迎注册</h1>
+    {% if form_errors(form.username) %}
+        <div class="field error">
+            {{ form_widget(form.username,{'attr':{'value':'用户名已存在'}} ) }}
+        </div>
+    {% else %}
+        <div class="field">
+            {{ form_widget(form.username,{'attr':{'placeholder':'填写用户名'} }) }}
+        </div>
+    {% endif %}
+
+    <div class="field">
+        {{ form_widget(form.email,{'attr':{'placeholder':'填写邮箱'} }) }}
+    </div>
+
+    {% if form_errors(form.plainPassword.first) %}
+        <div class="field error">
+            {{ form_widget(form.plainPassword.first) }}
+        </div>
+    {% else %}
+        <div class="field">
+            {{ form_widget(form.plainPassword.first,{'attr':{'placeholder':'输入密码'} }) }}
+        </div>
+    {% endif %}
+
+    {% if form_errors(form.plainPassword.second) %}
+        <div class="field error">
+            {{ form_widget(form.plainPassword.second) }}
+        </div>
+    {% else %}
+        <div class="field">
+            {{ form_widget(form.plainPassword.second,{'attr':{'placeholder':'确认密码'} }) }}
+        </div>
+    {% endif %}
+
+    <div class="field">
+        <div class="ui buttons">
+            <input class="big ui positive button" type="submit" id="_submit" name="_submit" value="注册"/>
+
+            <div class="or"></div>
+            <a href="{{ path('fos_user_security_login') }}">
+                <div class="big ui negative button"
+                        >返回
+                </div>
+            </a>
+        </div>
+    </div>
+</form>
+
+

@@ -1,0 +1,39 @@
+{% extends "FOSUserBundle::log_reg_layout.html.twig" %}
+{% block title %}欢迎登陆{% endblock %}
+
+{% block fos_user_content %}
+    <form class="ui form" action="{{ path("fos_user_security_check") }}" method="post">
+        <h1 class="ui horizontal header divider">欢迎登录</h1>
+        {% if error %}
+            <div class="ui negative message">
+                <i class="close icon"></i>
+
+                <p>用户名或密码错误</p>
+            </div>
+        {% endif %}
+        <div class="field">
+            <input type="text" id="username" name="_username" value="{{ last_username }}" required="required"
+                   placeholder="填写用户名"/>
+        </div>
+        <div class="field">
+            <input type="password" id="password" name="_password" required="required" placeholder="请填写密码"/>
+        </div>
+        <div class="field">
+            <div class="ui toggle checkbox">
+                <input type="checkbox" id="remember_me" name="_remember_me" value="on"/>
+                <label for="remember_me">记住密码</label>
+            </div>
+        </div>
+        <div class="field">
+            <div class="ui buttons">
+                <input class="big ui positive button" type="submit" id="_submit" name="_submit" value="登录"/>
+
+                <div class="or"></div>
+                <a href="{{ path('fos_user_registration_register') }}">
+                    <div class="big ui negative button">注册</div>
+                </a>
+            </div>
+        </div>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token }}"/>
+    </form>
+{% endblock %}

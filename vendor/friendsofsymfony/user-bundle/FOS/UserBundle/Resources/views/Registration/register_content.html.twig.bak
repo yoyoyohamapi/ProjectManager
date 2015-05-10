@@ -1,0 +1,11 @@
+<form class="ui form" action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
+    {{ form_widget(form) }}
+    <div class="field">
+        <div class="ui buttons">
+            <input class="big ui positive button" type="submit" id="_submit" name="_submit" value="注册"/>
+            <div class="or"></div>
+            <div class="big ui negative button">返回</div>
+        </div>
+    </div>
+</form>
+

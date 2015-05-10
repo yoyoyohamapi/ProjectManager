@@ -1,0 +1,9 @@
+{% extends "FOSUserBundle::log_reg_layout.html.twig" %}
+
+{% block fos_user_content %}
+    {% include "FOSUserBundle:Registration:register_content.html.twig" %}
+{% endblock fos_user_content %}
+{% block scripts %}
+    {% set script_action='account/index_register' %}
+    {{ parent() }}
+{% endblock %}
