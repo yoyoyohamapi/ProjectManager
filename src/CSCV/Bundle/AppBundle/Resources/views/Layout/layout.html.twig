@@ -7,9 +7,7 @@
     {% endblock %}
 </head>
 <body>
-{% block navbar %}
-
-
+{% if noSideHeader is not defined %}
     {# 侧栏 #}
     <div id="sidebar" class="ui left vertical inverted labeled icon sidebar menu">
         <a class="item">
@@ -65,12 +63,16 @@
             <i class="user icon"></i> Friends
         </a>
     </div>
-{% endblock %}
+{% endif %}
 
 <div class="pusher">
-    <div id="mainContainer">
+    {% if noSideHeader is not defined %}
+    <div id="mainContainer" style="padding-top:150px">
+        {% else %}
+        <div id="mainContainer">
+            {% endif %}
         {% block content %}
-    {% endblock %}
+        {% endblock %}
     </div>
 </div>
 {% if footer is defined %}
