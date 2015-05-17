@@ -21,7 +21,10 @@ class ImageController extends BaseController
     {
         $dm = $this->get('doctrine_mongodb')->getManager();
         $image = new Image();
-        $form = $this->createForm(new ImageType(), $image);
+        $form = $this->createForm(
+            new ImageType($this->get('disease_service')),
+            $image
+        );
         $form->add(
             IMAGE::NAME_KEY,
             'hidden'
@@ -37,11 +40,11 @@ class ImageController extends BaseController
             $finder->name($image->getName());
             $finder->files()->in(ImageController::IMAGE_DIR.'//tmp');
             $date = date("Y-m");
-            $dir = 'storage//images//'.$image->getType().'//'.$date;
+            $dir = ImageController::IMAGE_DIR.$image->getDisease().'//'.$date;
             foreach ($finder as $file) {
                 $tmp = new File($file->getRealPath());
                 $dst = $tmp->move($dir, $image->getName());
-                $image->setName($dst->getRealPath());
+                $image->setName($dir);
             }
             $dm->persist($image);
             $dm->flush();
@@ -54,6 +57,8 @@ class ImageController extends BaseController
                 JsonResponse::HTTP_OK,
                 ''
             );
+        } else {
+            //var_dump($form->getErrors());
         }
 
         return $this->render(

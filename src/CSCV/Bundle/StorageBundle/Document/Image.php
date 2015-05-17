@@ -10,6 +10,7 @@
 namespace CSCV\Bundle\StorageBundle\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use Doctrine\ODM\MongoDB\Mapping\Annotations\ReferenceOne;
 use JMS\Serializer\Annotation as JMS;
 use JMS\Serializer\Annotation\Expose;
 
@@ -21,7 +22,7 @@ class Image
 
     const DOC_NAME = 'image';
     const NAME_KEY = 'name';
-    const TYPE_KEY = 'type';
+    const DISEASE_KEY = 'disease';
     const CROPPED_KEY = 'cropped';
     const LOCATION_KEY = 'location';
     const FEATRUE_TEXTURE_KEY = 'feature_texture';
@@ -38,9 +39,9 @@ class Image
     private $name; // 文件名
 
     /**
-     * @MongoDB\Int
+     * @ReferenceOne(targetDocument="Disease",simple=true)
      */
-    private $type; // 分类标记
+    private $disease; // 分类标记
 
     /**
      * @MongoDB\Boolean
@@ -59,6 +60,7 @@ class Image
 
     /**
      * @MongoDB\Hash
+     *
      */
     private $feature_color; // 颜色特征
 
@@ -152,28 +154,6 @@ class Image
         return $this->name;
     }
 
-    /**
-     * Set type
-     *
-     * @param int $type
-     * @return self
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    /**
-     * Get type
-     *
-     * @return int $type
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
 
     /**
      * Set cropped
@@ -265,5 +245,29 @@ class Image
     public function getFeatureColor()
     {
         return $this->feature_color;
+    }
+
+
+    /**
+     * Set disease
+     *
+     * @param CSCV\Bundle\StorageBundle\Document\Disease $disease
+     * @return self
+     */
+    public function setDisease(\CSCV\Bundle\StorageBundle\Document\Disease $disease)
+    {
+        $this->disease = $disease;
+
+        return $this;
+    }
+
+    /**
+     * Get disease
+     *
+     * @return CSCV\Bundle\StorageBundle\Document\Disease $disease
+     */
+    public function getDisease()
+    {
+        return $this->disease;
     }
 }

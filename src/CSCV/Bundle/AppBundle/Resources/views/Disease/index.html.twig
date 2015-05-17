@@ -1,0 +1,30 @@
+{% extends '@CSCVApp/Disease/layout.html.twig' %}
+{% block title %}疾病浏览{% endblock %}
+{% block content %}
+    <div class="ui three cards" style="text-align: left">
+        {% for disease in diseases %}
+            <div class="card">
+                <a class="image" href=" {{ path('cscv_app_disease_show', {'id': disease.id }) }}">
+                    <img src="{{ asset('bundles/cscvapp/images/1.0/account/bkg.jpg') }}"/>
+                </a>
+
+                <div class="content">
+                    <div class="header">{{ disease.name }}</div>
+                    <div class="meta">
+                        <span class="right floated">{{ disease.index }}</span>
+                        <span class="category">索引号</span>
+                    </div>
+                    <div class="meta">
+                        <span class="right floated">{{ counts[loop.index-1] }}</span>
+                        <span class="category">拥有图片</span>
+                    </div>
+                </div>
+                <a class="ui bottom attached blue button"
+                   href="{{ path('cscv_app_disease_edit', {'id': disease.id }) }}">
+                    <i class="pencil icon"></i>
+                    编辑
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

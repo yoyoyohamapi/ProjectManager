@@ -79,7 +79,10 @@ class ImageController extends BaseController
 
         $dm = $this->get('doctrine_mongodb')->getManager();
         $image = new Image();
-        $form = $this->createForm(new ImageType(), $image);
+        $form = $this->createForm(
+            new ImageType($this->get('disease_service')),
+            $image
+        );
         $form->handleRequest($request);
         if ($form->isValid()) {
             // 设置图像名称

@@ -30,7 +30,7 @@ define(function (require, exports, module) {
             previewHeight: 220,
             previewCrop: true,
             files: [],
-            currentFile: undefined
+            currentFile: undefined,
         },
         events: {
             'click #submit': 'doSubmit',
@@ -121,7 +121,7 @@ define(function (require, exports, module) {
             var diseaseList = this.$("#diseaseList");
             var locationList = this.$("#locationList");
             // 初始化疾病
-            this.$('#image_type option').each(function () {
+            this.$('#image_disease option').each(function () {
                 diseaseList.append("<div class='item'><button class='ui red mini button' data-value='" +
                 $(this).val() + "'>"
                 + $(this).text()
@@ -185,8 +185,7 @@ define(function (require, exports, module) {
         setDisease: function (e) {
             var disease = $(e.target).attr('data-value');
             var diseaseName = $(e.target).text();
-            // 设置表单项
-            this.$('#image_type').val(disease);
+            this.$('#image_disease').val(disease);
             // 设置标签
             this.$('#diseaseTag').text(diseaseName);
         },

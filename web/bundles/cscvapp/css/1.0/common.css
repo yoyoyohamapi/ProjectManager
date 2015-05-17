@@ -1,3 +1,4 @@
+
 .hide {
     display: none;
 }
@@ -11,10 +12,31 @@
     top: 60px;
 }
 
-#mainContainer {
+.sideContainer {
+}
+
+.mainContainer {
     /*padding-top: 70px;*/
+    position: relative;
+    margin: 0px auto;
+}
+
+#main {
+    text-align: center;
 }
 
 .ui.horizontal.list.buttonList > .item {
     margin-left: 0;
+}
+
+@media only screen and (min-width: 1355px) {
+    .mainContainer {
+        width: 850px;
+    }
+}
+
+@media only screen and (min-width: 998px) {
+    .mainContainer {
+        /*right: 110px;*/
+    }
 }

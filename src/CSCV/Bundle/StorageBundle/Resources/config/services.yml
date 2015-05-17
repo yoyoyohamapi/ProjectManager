@@ -2,3 +2,15 @@ services:
 #    cscv_storage.example:
 #        class: CSCV\Bundle\StorageBundle\Example
 #        arguments: [@service_id, "plain_value", %parameter%]
+
+    base_service:
+        class: CSCV\Bundle\StorageBundle\Service\BaseService
+        arguments: [@doctrine_mongodb]
+
+    disease_service:
+        class: CSCV\Bundle\StorageBundle\Service\DiseaseService
+        parent: base_service
+
+    image_service:
+        class: CSCV\Bundle\StorageBundle\Service\ImageService
+        parent: base_service

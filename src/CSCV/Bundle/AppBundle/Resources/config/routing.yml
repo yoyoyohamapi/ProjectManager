@@ -22,6 +22,31 @@ cscv_app_image_find:
     path: /image/find/{imageName}
     defaults: { _controller: CSCVAppBundle:Image:find }
 
+# 浏览疾病
+cscv_app_disease_index:
+    path: /disease
+    defaults: { _controller: CSCVAppBundle:Disease:index }
+
+# 显示疾病
+cscv_app_disease_show:
+    path: /disease/show/{id}
+    defaults: { _controller: CSCVAppBundle:Disease:show}
+    methods: [GET]
+
+# 新建疾病
+cscv_app_disease_new:
+    path: /disease/new
+    defaults: { _controller: CSCVAppBundle:Disease:new}
+
+# 编辑疾病
+cscv_app_disease_edit:
+    path: /disease/edit/{id}
+    defaults: { _controller: CSCVAppBundle:Disease:edit}
+
 cscv_app_test_sea:
     path:    /test/sea
     defaults: { _controller:CSCVAppBundle:Test:sea }
+
+cscv_app_test_form:
+    path: /test/form
+    defaults: { _controller:CSCVAppBundle:Test:form}

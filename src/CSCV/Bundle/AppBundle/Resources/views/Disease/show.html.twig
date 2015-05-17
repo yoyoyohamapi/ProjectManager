@@ -1,0 +1,11 @@
+{% extends '@CSCVApp/Disease/layout.html.twig' %}
+{% block title %}{{ disease.name }}{% endblock %}
+{% block content %}
+    <ul>
+        <li>{{ disease.index }}</li>
+        <li>{{ disease.name }}</li>
+    </ul>
+    <a class="ui button" href="{{ path('cscv_app_disease_edit', {'id': disease.id}) }}">
+        Edit
+    </a>
+{% endblock %}
