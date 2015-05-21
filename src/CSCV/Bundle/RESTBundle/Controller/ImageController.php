@@ -77,7 +77,8 @@ class ImageController extends BaseController
     public function postImageAction(Request $request)
     {
 
-        $dm = $this->get('doctrine_mongodb')->getManager();
+        $imageService = $this->get('image_service');
+
         $image = new Image();
         $form = $this->createForm(
             new ImageType($this->get('disease_service')),
@@ -95,4 +96,12 @@ class ImageController extends BaseController
 
         return $this->get('fos_rest.view_handler')->handle($view);
     }
+
+
+    public function uploadAction()
+    {
+        $imageService = $this->get('image_service');
+    }
+
+
 }

@@ -13,14 +13,9 @@ cscv_app_image_upload:
     defaults: { _controller: CSCVAppBundle:Image:upload }
     methods: [POST]
 
-# 标定图像
-cscv_app_image_post:
-    path: /image/post
-    defaults: { _controller: CSCVAppBundle:Image:post }
-
-cscv_app_image_find:
-    path: /image/find/{imageName}
-    defaults: { _controller: CSCVAppBundle:Image:find }
+cscv_app_image_file:
+    path:   /image/file
+    defaults: { _controller: CSCVAppBundle:Image:file }
 
 # 浏览疾病
 cscv_app_disease_index:

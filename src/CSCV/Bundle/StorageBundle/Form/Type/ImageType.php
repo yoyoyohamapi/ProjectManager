@@ -18,27 +18,10 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
  */
 class ImageType extends AbstractType
 {
-    private $disService;
-
-    public function __construct($disService)
-    {
-        $this->disService = $disService;
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add(Image::CROPPED_KEY, 'checkbox')
-            ->add(
-                Image::DISEASE_KEY,
-                'document',
-                array(
-                    'class' => 'CSCVStorageBundle:Disease',
-                    'property' => 'name',
-                    'choices' => $this->getDiseases(),
-                    'multiple' => false,
-                )
-            )
             ->add(
                 Image::LOCATION_KEY,
                 'choice',
@@ -71,10 +54,4 @@ class ImageType extends AbstractType
         return 'image';
     }
 
-    protected function getDiseases()
-    {
-        $disease = $this->disService->findAllBase();
-
-        return $disease;
-    }
 }

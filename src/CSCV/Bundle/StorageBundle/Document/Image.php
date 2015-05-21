@@ -27,6 +27,7 @@ class Image
     const LOCATION_KEY = 'location';
     const FEATRUE_TEXTURE_KEY = 'feature_texture';
     const FEATURE_COLOR_KEY = 'feature_color';
+    const STATE_KEY = 'state';
 
     /**
      * @MongoDB\Id(strategy="auto")
@@ -34,9 +35,9 @@ class Image
     private $id;
 
     /**
-     * @MongoDB\String
+     * @MongoDB\File
      */
-    private $name; // 文件名
+    private $file; // 文件
 
     /**
      * @ReferenceOne(targetDocument="Disease",simple=true)
@@ -74,6 +75,10 @@ class Image
      */
     private $updated_at; // 更新时间
 
+    /**
+     * @MongoDB\Int
+     */
+    private $state = 0; // 状态码
 
     /**
      * Set createdAt
@@ -131,28 +136,6 @@ class Image
         return $this->id;
     }
 
-    /**
-     * Set name
-     *
-     * @param string $name
-     * @return self
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string $name
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
 
 
     /**
@@ -269,5 +252,51 @@ class Image
     public function getDisease()
     {
         return $this->disease;
+    }
+
+    /**
+     * Set state
+     *
+     * @param int $state
+     * @return self
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * Get state
+     *
+     * @return int $state
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * Set file
+     *
+     * @param file $file
+     * @return self
+     */
+    public function setFile($file)
+    {
+        $this->file = $file;
+
+        return $this;
+    }
+
+    /**
+     * Get file
+     *
+     * @return file $file
+     */
+    public function getFile()
+    {
+        return $this->file;
     }
 }

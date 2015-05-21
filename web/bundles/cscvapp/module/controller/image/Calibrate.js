@@ -158,7 +158,7 @@ define(function (require, exports, module) {
                 // 更新预览图
                 card.find('#preview').attr('src', imageFullPath);
                 // 更新hidden input
-                form.find("input#image_name").attr('value', imageName);
+                form.find("input#path").attr('value', imageName);
             } else {
                 // 标定结束,显示继续上传
                 card.transition({
