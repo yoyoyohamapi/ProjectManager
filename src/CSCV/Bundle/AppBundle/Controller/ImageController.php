@@ -4,6 +4,7 @@ namespace CSCV\Bundle\AppBundle\Controller;
 
 
 use CSCV\Bundle\StorageBundle\Document\Image;
+use CSCV\Bundle\StorageBundle\Document\State;
 use CSCV\Bundle\StorageBundle\Form\Type\ImageType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,6 +36,7 @@ class ImageController extends BaseController
         $form->handleRequest($request);
         if ($form->isValid()) {
             $imageService = $this->get('image_service');
+            $image->setState(State::SETTED);
             $imageService->saveImg($image, $request->get('path'));
             $response = array(
                 'success' => true

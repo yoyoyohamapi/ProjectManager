@@ -73,15 +73,17 @@ class ImageService extends BaseService
         $image->setCreatedAt($datetime);
         $image->setUpdatedAt($datetime);
         // 转移文件 ---> /疾病/日期(精确到)/唯一码
-        $finder = new Finder();
-        $finder->name($fileName);
-        $finder->files()->in(ImageService::IMAGE_DIR.'//tmp');
-        $date = date("Y-m");
-        $dir = ImageService::IMAGE_DIR.$image->getDisease().'//'.$date;
-        foreach ($finder as $file) {
-            $tmp = new File($file->getRealPath());
-            $file = $tmp->move($dir, $fileName);
-            $image->setFile($file->getRealPath());
+        if (!empty($fileName)) {
+            $finder = new Finder();
+            $finder->name($fileName);
+            $finder->files()->in(ImageService::IMAGE_DIR.'//tmp');
+            $date = date("Y-m");
+            $dir = ImageService::IMAGE_DIR.$image->getDisease().'//'.$date;
+            foreach ($finder as $file) {
+                $tmp = new File($file->getRealPath());
+                $file = $tmp->move($dir, $fileName);
+                $image->setFile($file->getRealPath());
+            }
         }
         parent::save($image);
     }

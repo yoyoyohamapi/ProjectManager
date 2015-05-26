@@ -4,8 +4,11 @@ namespace CSCV\Bundle\RESTBundle\Controller;
 
 use CSCV\Bundle\StorageBundle\Document\Image;
 use CSCV\Bundle\StorageBundle\Form\Type\ImageType;
+use CSCV\Bundle\StorageBundle\Service\ImageService;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\View\View;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 
 
@@ -78,7 +81,6 @@ class ImageController extends BaseController
     {
 
         $imageService = $this->get('image_service');
-
         $image = new Image();
         $form = $this->createForm(
             new ImageType($this->get('disease_service')),
@@ -86,9 +88,9 @@ class ImageController extends BaseController
         );
         $form->handleRequest($request);
         if ($form->isValid()) {
-            // 设置图像名称
-            $dm->persist($image);
-            $dm->flush();
+            //$file_contents = $request->get('file_contents');
+            $imageService->saveImg($image, null);
+        } else {
         }
         $view = View::create()
             ->setStatusCode(200)
@@ -97,10 +99,28 @@ class ImageController extends BaseController
         return $this->get('fos_rest.view_handler')->handle($view);
     }
 
-
-    public function uploadAction()
+    /**
+     * @ApiDoc(
+     *     resource=true,
+     *     description="上传图像",
+     *     output="CSCV\Bundle\StorageBundle\Document\Image"
+     * )
+     * @return mixed
+     */
+    public function uploadAction(Request $request)
     {
         $imageService = $this->get('image_service');
+        $image = new Image();
+        $file = new File($_FILES['file']['tmp_name']);
+        $imageName = md5(uniqid(rand())).".jpg";
+        //将图像暂存至unset
+        $file->move(ImageService::IMAGE_DIR."//unset", $imageName);
+        $imageService->saveImg($image, null);
+        $view = View::create()
+            ->setStatusCode(200)
+            ->setData($image);
+
+        return $this->get('fos_rest.view_handler')->handle($view);
     }
 
 

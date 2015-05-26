@@ -78,7 +78,7 @@ class Image
     /**
      * @MongoDB\Int
      */
-    private $state = 0; // 状态码
+    private $state = State::UNSETTED; // 状态码
 
     /**
      * Set createdAt

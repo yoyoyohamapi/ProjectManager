@@ -15,8 +15,9 @@ cscv_rest_images:
     type: rest
 
 cscv_rest_image_upload:
-    path: /api/upload
+    path: /api/images/upload
     defaults: { _controller: CSCVRESTBundle:Image:upload}
+    methods: [POST]
 
 NelmioApiDocBundle:
     resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
