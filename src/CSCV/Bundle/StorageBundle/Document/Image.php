@@ -22,6 +22,7 @@ class Image
 
     const DOC_NAME = 'image';
     const NAME_KEY = 'name';
+    const PATHS_KEY = 'paths';
     const DISEASE_KEY = 'disease';
     const CROPPED_KEY = 'cropped';
     const LOCATION_KEY = 'location';
@@ -35,9 +36,9 @@ class Image
     private $id;
 
     /**
-     * @MongoDB\File
+     * @ReferenceOne(targetDocument="Paths",cascade={"persist"})
      */
-    private $file; // 文件
+    private $paths;
 
     /**
      * @ReferenceOne(targetDocument="Disease",simple=true)
@@ -278,25 +279,24 @@ class Image
     }
 
     /**
-     * Set file
+     * Set paths
      *
-     * @param file $file
+     * @param CSCV\Bundle\StorageBundle\Document\Paths $paths
      * @return self
      */
-    public function setFile($file)
+    public function setPaths(\CSCV\Bundle\StorageBundle\Document\Paths $paths)
     {
-        $this->file = $file;
-
+        $this->paths = $paths;
         return $this;
     }
 
     /**
-     * Get file
+     * Get paths
      *
-     * @return file $file
+     * @return CSCV\Bundle\StorageBundle\Document\Paths $paths
      */
-    public function getFile()
+    public function getPaths()
     {
-        return $this->file;
+        return $this->paths;
     }
 }

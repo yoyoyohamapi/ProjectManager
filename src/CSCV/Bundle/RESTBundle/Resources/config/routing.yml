@@ -14,10 +14,23 @@ cscv_rest_images:
     prefix: /api
     type: rest
 
+# 上传图像的路由
 cscv_rest_image_upload:
     path: /api/images/upload
-    defaults: { _controller: CSCVRESTBundle:Image:upload}
+    defaults: { _controller: CSCVRESTBundle:Image:upload }
     methods: [POST]
+
+# 配置疾病路由
+cscv_rest_diseases:
+    resource: CSCV\Bundle\RESTBundle\Controller\DiseaseController
+    prefix: /api
+    type: rest
+
+# 获得对应疾病的所有图像
+cscv_rest_disease_images:
+   path: /api/diseaes/{disease}/images
+   defaults: { _controller: CSCVRESTBundle:Disease:getImages }
+   methods: [GET]
 
 NelmioApiDocBundle:
     resource: "@NelmioApiDocBundle/Resources/config/routing.yml"

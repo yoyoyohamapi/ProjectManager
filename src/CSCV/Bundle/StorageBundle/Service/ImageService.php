@@ -2,6 +2,7 @@
 namespace CSCV\Bundle\StorageBundle\Service;
 
 use CSCV\Bundle\StorageBundle\Document\Image;
+use CSCV\Bundle\StorageBundle\Document\Paths;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,9 +31,22 @@ class ImageService extends BaseService
             ->createQueryBuilder(DiseaseService::DOC_NAME);
     }
 
+    /**
+     * 获得所有疾病
+     * @return mixed
+     */
     public function findAll()
     {
         return $this->repo->findAll();
+    }
+
+    /**
+     * 根据疾病Id获得图像
+     * @param $disease
+     */
+    public function findByDisease($disease)
+    {
+        return $this->repo->findByDisease($disease);
     }
 
     /**
@@ -66,23 +80,38 @@ class ImageService extends BaseService
 
     }
 
-    public function saveImg($image, $fileName)
+    /**
+     * @param $image 待保存图像对象
+     * @param $fileInfo 文件信息
+     *        $fileInfo['name']: 图像
+     *        $fileInfo['type']: 图像类型（原图，裁剪后图，分割后图）
+     */
+    public function saveImg($image, $fileInfo)
     {
         // 设置创建时间及更新时间
         $datetime = new \MongoDate();
         $image->setCreatedAt($datetime);
         $image->setUpdatedAt($datetime);
         // 转移文件 ---> /疾病/日期(精确到)/唯一码
-        if (!empty($fileName)) {
+        if (!empty($fileInfo)) {
             $finder = new Finder();
-            $finder->name($fileName);
+            $finder->name($fileInfo['name']);
             $finder->files()->in(ImageService::IMAGE_DIR.'//tmp');
             $date = date("Y-m");
-            $dir = ImageService::IMAGE_DIR.$image->getDisease().'//'.$date;
+            /* 文件保存路径:
+                若设置了疾病类型：基础路径/疾病ID/图像类型/日期
+                若未设置疾病类型：基础路径/unset/图像类型/日期
+            */
+            $disDir = empty($image->getDisease()) ?
+                'unset' : $image->getDisease();
+            $dir = ImageService::IMAGE_DIR.'//'.$disDir.'//'.$fileInfo['type'].'//'.$date;
             foreach ($finder as $file) {
                 $tmp = new File($file->getRealPath());
-                $file = $tmp->move($dir, $fileName);
-                $image->setFile($file->getRealPath());
+                $file = $tmp->move($dir, $fileInfo['name']);
+                $paths = new Paths();
+                echo $paths->getId();
+                $paths->setImgFile($file->getRealPath(), $fileInfo['type']);
+                $image->setPaths($paths);
             }
         }
         parent::save($image);

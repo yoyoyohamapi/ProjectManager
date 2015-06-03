@@ -4,6 +4,7 @@ namespace CSCV\Bundle\AppBundle\Controller;
 
 
 use CSCV\Bundle\StorageBundle\Document\Image;
+use CSCV\Bundle\StorageBundle\Document\Paths;
 use CSCV\Bundle\StorageBundle\Document\State;
 use CSCV\Bundle\StorageBundle\Form\Type\ImageType;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -36,8 +37,13 @@ class ImageController extends BaseController
         $form->handleRequest($request);
         if ($form->isValid()) {
             $imageService = $this->get('image_service');
+            // 设置图像标定状态为True
             $image->setState(State::SETTED);
-            $imageService->saveImg($image, $request->get('path'));
+            $fileInfo = array(
+                'name' => $request->get('path'),
+                'type' => Paths::SRC_KEY
+            );
+            $imageService->saveImg($image, $fileInfo);
             $response = array(
                 'success' => true
             );
@@ -47,7 +53,6 @@ class ImageController extends BaseController
                 ''
             );
         } else {
-            //var_dump($form->getErrors());
         }
 
         return $this->render(

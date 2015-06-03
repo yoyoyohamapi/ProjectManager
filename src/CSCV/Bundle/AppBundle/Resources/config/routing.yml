@@ -1,5 +1,5 @@
 cscv_app_homepage:
-    path:     /index
+    path:     /
     defaults: { _controller: CSCVAppBundle:Default:index }
 
 # 图像标定主页

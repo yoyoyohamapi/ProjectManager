@@ -1,7 +1,8 @@
 {% extends '@CSCVApp/Disease/layout.html.twig' %}
 {% block title %}疾病浏览{% endblock %}
 {% block content %}
-    <div class="ui three cards" style="text-align: left">
+    <div id="list" class="ui three cards" style="text-align: left">
+
         {% for disease in diseases %}
             <div class="card">
                 <a class="image" href=" {{ path('cscv_app_disease_show', {'id': disease.id }) }}">
@@ -26,5 +27,20 @@
                 </a>
             </div>
         {% endfor %}
+        {# 添加疾病 #}
+        <a class="card" id="add" href="{{ path('cscv_app_disease_new') }}">
+            <div class="content">
+                <p><i class="ui add circle icon"></i></p>
+
+                <p>
+
+                <h1>添加疾病</h1></p>
+            </div>
+        </a>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    {% set script_action='disease/index' %}
+    {{ parent() }}
 {% endblock %}

@@ -7,7 +7,7 @@ class DefaultController extends BaseController
 {
     public function indexAction()
     {
-        return $this->render('CSCVAppBundle:Default:index.html.twig');
+        return $this->redirectToRoute('cscv_app_image_index');
     }
 
 

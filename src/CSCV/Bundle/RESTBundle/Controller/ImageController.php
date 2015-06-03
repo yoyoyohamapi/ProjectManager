@@ -27,9 +27,7 @@ class ImageController extends BaseController
      */
     public function getImagesAction()
     {
-        $images = $this->get('doctrine_mongodb')
-            ->getRepository('CSCVStorageBundle:Image')
-            ->findAll();
+        $images = $this->get("image_service")->findAll();
 
         $view = View::create()
             ->setStatusCode(200)
@@ -66,6 +64,8 @@ class ImageController extends BaseController
         $view = View::create()
             ->setStatusCode(200)
             ->setData($image);
+
+        return $this->get('fos_rest.view_handler')->handle($view);
     }
 
     /**
@@ -111,11 +111,16 @@ class ImageController extends BaseController
     {
         $imageService = $this->get('image_service');
         $image = new Image();
-        $file = new File($_FILES['file']['tmp_name']);
-        $imageName = md5(uniqid(rand())).".jpg";
+        $tmp = new File($_FILES['file']['tmp_name']);
+        $fileType = $request->get('fileType');
+        $fileName = md5(uniqid(rand())).".jpg";
         //将图像暂存至unset
-        $file->move(ImageService::IMAGE_DIR."//unset", $imageName);
-        $imageService->saveImg($image, null);
+        $file = $tmp->move(ImageService::IMAGE_DIR."//tmp", $fileName);
+        $fileInfo = array(
+            'name' => $fileName,
+            'type' => $fileType
+        );
+        $imageService->saveImg($image, $fileInfo);
         $view = View::create()
             ->setStatusCode(200)
             ->setData($image);
