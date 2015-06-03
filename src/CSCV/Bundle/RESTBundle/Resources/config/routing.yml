@@ -29,7 +29,7 @@ cscv_rest_diseases:
 # 获得对应疾病的所有图像
 cscv_rest_disease_images:
    path: /api/diseaes/{disease}/images
-   defaults: { _controller: CSCVRESTBundle:Disease:getImages }
+   defaults: { _controller: CSCVRESTBundle:Disease:getDiseaseImages }
    methods: [GET]
 
 NelmioApiDocBundle:

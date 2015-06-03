@@ -54,7 +54,7 @@ class DiseaseController extends BaseController
      * )
      * @param $disease 疾病号
      */
-    public function getImagesAction($disease)
+    public function getDiseaseImagesAction($disease)
     {
         $images = $this->get('image_service')
             ->findByDisease($disease);
