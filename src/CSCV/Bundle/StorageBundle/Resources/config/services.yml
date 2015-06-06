@@ -5,7 +5,7 @@ services:
 
     base_service:
         class: CSCV\Bundle\StorageBundle\Service\BaseService
-        arguments: [@doctrine_mongodb]
+        arguments: [@doctrine_mongodb,@service_container]
 
     disease_service:
         class: CSCV\Bundle\StorageBundle\Service\DiseaseService
@@ -13,4 +13,8 @@ services:
 
     image_service:
         class: CSCV\Bundle\StorageBundle\Service\ImageService
+        parent: base_service
+
+    api_token_service:
+        class: CSCV\Bundle\StorageBundle\Service\ApiTokenService
         parent: base_service

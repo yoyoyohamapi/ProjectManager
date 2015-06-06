@@ -1,0 +1,10 @@
+{% extends 'CSCVAppBundle:Token:layout.html.twig' %}
+{% block title %}新建Token{% endblock %}
+{% block content %}
+    <div>
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <input type="submit" value="submit">
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

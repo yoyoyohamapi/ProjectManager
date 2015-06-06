@@ -1,0 +1,16 @@
+{% extends 'CSCVAppBundle:Token:layout.html.twig' %}
+{% block title %}Token浏览{% endblock %}
+
+{% block content %}
+    <div>
+        {% for token in tokens %}
+            <div>
+                <p>{{ token.appName }}</p>
+
+                <p>{{ token.token }}</p>
+
+                <p>{{ token.limit|date('Y-m-d') }}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

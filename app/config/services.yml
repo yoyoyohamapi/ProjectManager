@@ -11,3 +11,9 @@ services:
       class: Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer
       tags:
          - { name: serializer.normalizer }
+
+   app.tokens.action_listener:
+           class: CSCV\Bundle\RESTBundle\EventListener\TokenListener
+           arguments: [@api_token_service]
+           tags:
+               - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }

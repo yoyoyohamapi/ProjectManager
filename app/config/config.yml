@@ -134,4 +134,7 @@ fos_user:
     firewall_name: main
     user_class: CSCV\Bundle\StorageBundle\Document\User
 
-# 跨域访问Api
+# JMS Security
+jms_security_extra:
+    util:
+        secure_random: ~

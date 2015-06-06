@@ -3,8 +3,10 @@
 namespace CSCV\Bundle\AppBundle\Controller;
 
 
+use CSCV\Bundle\StorageBundle\Document\Author;
+use CSCV\Bundle\StorageBundle\Document\Book;
 use CSCV\Bundle\StorageBundle\Document\Image;
-use CSCV\Bundle\StorageBundle\Document\Paths;
+use CSCV\Bundle\StorageBundle\Document\ImageFile;
 use CSCV\Bundle\StorageBundle\Document\State;
 use CSCV\Bundle\StorageBundle\Form\Type\ImageType;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -41,12 +43,13 @@ class ImageController extends BaseController
             $image->setState(State::SETTED);
             $fileInfo = array(
                 'name' => $request->get('path'),
-                'type' => Paths::SRC_KEY
+                'type' => ImageFile::IMAGE_SRC_TYPE
             );
             $imageService->saveImg($image, $fileInfo);
             $response = array(
                 'success' => true
             );
+
             return $this->createJsonResponse(
                 $response,
                 JsonResponse::HTTP_OK,
@@ -70,6 +73,7 @@ class ImageController extends BaseController
     {
         $imageService = $this->get('image_service');
         $data = $imageService->uploadAction($request);
+
         return $this->createJsonResponse(
             $data,
             JsonResponse::HTTP_OK,
@@ -79,10 +83,14 @@ class ImageController extends BaseController
 
     public function fileAction()
     {
+        $dm = $this->get('doctrine_mongodb')->getManager();
         $imagesService = $this->get('image_service');
-        $file = $imagesService->findAll()[0]->getFile();
+        //$images = $imagesService->findAll();
+        $image = $imagesService->find('55727866e7ec7be14a0041a7');
+        $files = $image->getImageFiles()->toArray();
         header('Content-type: image/png');
-        echo $file->getBytes();
+        echo $files[0]->getFile()->getBytes();
+
     }
 
 

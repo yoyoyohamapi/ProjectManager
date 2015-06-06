@@ -28,7 +28,6 @@ class ImageController extends BaseController
     public function getImagesAction()
     {
         $images = $this->get("image_service")->findAll();
-
         $view = View::create()
             ->setStatusCode(200)
             ->setData($images);
@@ -57,9 +56,6 @@ class ImageController extends BaseController
             ->getRepository('CSCVStorageBundle:Image')
             ->find($id);
 
-        if (!$image) {
-            throw $this->createNotFoundException('No image found for id:'.$id);
-        }
 
         $view = View::create()
             ->setStatusCode(200)

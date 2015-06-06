@@ -9,10 +9,8 @@
 
 namespace CSCV\Bundle\StorageBundle\Document;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
-use Doctrine\ODM\MongoDB\Mapping\Annotations\ReferenceOne;
-use JMS\Serializer\Annotation as JMS;
-use JMS\Serializer\Annotation\Expose;
 
 /**
  * @MongoDB\Document
@@ -20,15 +18,15 @@ use JMS\Serializer\Annotation\Expose;
 class Image
 {
 
-    const DOC_NAME = 'image';
+    const DOC_NAME = 'Image';
     const NAME_KEY = 'name';
-    const PATHS_KEY = 'paths';
     const DISEASE_KEY = 'disease';
     const CROPPED_KEY = 'cropped';
     const LOCATION_KEY = 'location';
-    const FEATRUE_TEXTURE_KEY = 'feature_texture';
+    const FEATURE_TEXTURE_KEY = 'feature_texture';
     const FEATURE_COLOR_KEY = 'feature_color';
     const STATE_KEY = 'state';
+    const IMAGE_FILES_KEY = 'imageFiles';
 
     /**
      * @MongoDB\Id(strategy="auto")
@@ -36,12 +34,7 @@ class Image
     private $id;
 
     /**
-     * @ReferenceOne(targetDocument="Paths",cascade={"persist"})
-     */
-    private $paths;
-
-    /**
-     * @ReferenceOne(targetDocument="Disease",simple=true)
+     * @MongoDB\ReferenceOne(targetDocument="Disease",simple=true)
      */
     private $disease; // 分类标记
 
@@ -80,6 +73,17 @@ class Image
      * @MongoDB\Int
      */
     private $state = State::UNSETTED; // 状态码
+
+    /**
+     * @MongoDB\ReferenceMany(targetDocument="ImageFile",cascade="all")
+     */
+    private $imageFiles = array();
+
+
+    public function __construct()
+    {
+        $this->imageFiles = new ArrayCollection();
+    }
 
     /**
      * Set createdAt
@@ -278,25 +282,35 @@ class Image
         return $this->state;
     }
 
+
     /**
-     * Set paths
+     * Add imageFile
      *
-     * @param CSCV\Bundle\StorageBundle\Document\Paths $paths
-     * @return self
+     * @param CSCV\Bundle\StorageBundle\Document\ImageFile $imageFile
      */
-    public function setPaths(\CSCV\Bundle\StorageBundle\Document\Paths $paths)
+    public function addImageFile(\CSCV\Bundle\StorageBundle\Document\ImageFile $imageFile)
     {
-        $this->paths = $paths;
-        return $this;
+        $this->imageFiles[] = $imageFile;
     }
 
     /**
-     * Get paths
+     * Remove imageFile
      *
-     * @return CSCV\Bundle\StorageBundle\Document\Paths $paths
+     * @param CSCV\Bundle\StorageBundle\Document\ImageFile $imageFile
      */
-    public function getPaths()
+    public function removeImageFile(\CSCV\Bundle\StorageBundle\Document\ImageFile $imageFile)
     {
-        return $this->paths;
+        $this->imageFiles->removeElement($imageFile);
     }
+
+    /**
+     * Get imageFiles
+     *
+     * @return \Doctrine\Common\Collections\Collection $imageFiles
+     */
+    public function getImageFiles()
+    {
+        return $this->imageFiles;
+    }
+
 }

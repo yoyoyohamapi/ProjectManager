@@ -10,5 +10,10 @@ class DefaultController extends BaseController
         return $this->redirectToRoute('cscv_app_image_index');
     }
 
+    public function createTokenAction()
+    {
+
+    }
+
 
 }
