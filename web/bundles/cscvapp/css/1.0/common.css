@@ -1,3 +1,5 @@
+body {
+}
 
 .hide {
     display: none;
@@ -7,6 +9,10 @@
 
 }
 
+#sidebar {
+    margin-top: 70px;
+    margin-left: 20px;
+}
 #sideLaunch {
     position: fixed;
     top: 60px;

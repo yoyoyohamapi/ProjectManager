@@ -15,6 +15,8 @@ seajs.config({
         "semantic-dropdown": "semantic-ui/1.6.3/build/components/dropdown.min.js",
         "semantic-checkbox": "semantic-ui/1.6.3/build/components/checkbox.min.js",
         "semantic-sidebar": "semantic-ui/1.6.3/build/components/sidebar.min.js",
+        "semantic-modal": "semantic-ui/1.6.3/build/components/modal.min.js",
+        "semantic-form": "semantic-ui/1.6.3/build/components/form.min.js",
         "jquery-ui-widget": "jquery-file-upload/9.9.2/js/vendor/jquery-ui-widget.js",
         "jquery-file-upload": "jquery-file-upload/9.9.2/js/jquery.fileupload.js",
         "jquery-file-upload-image": "jquery-file-upload/9.9.2/js/jquery.fileupload-image.js",

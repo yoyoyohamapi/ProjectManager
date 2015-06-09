@@ -10,6 +10,7 @@
 namespace CSCV\Bundle\RESTBundle\Controller;
 
 
+use FOS\RestBundle\Util\Codes;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
@@ -26,7 +27,10 @@ class DiseaseController extends BaseController
     {
         $diseases = $this->get('disease_service')
             ->findAll();
-        $view = $this->view($diseases, 200);
+        $view = $this->view(
+            $diseases,
+            Codes::HTTP_OK
+        );
 
         return $this->handleView($view);
     }
@@ -42,8 +46,10 @@ class DiseaseController extends BaseController
     {
         $disease = $this->get('disease_service')
             ->findById($id);
-        $view = $this->view($disease, 200);
-
+        $view = $this->view(
+            $disease,
+            Codes::HTTP_OK
+        );
         return $this->handleView($view);
     }
 
@@ -58,7 +64,10 @@ class DiseaseController extends BaseController
     {
         $images = $this->get('image_service')
             ->findByDisease($disease);
-        $view = $this->view($images, 200);
+        $view = $this->view(
+            $images,
+            Codes::HTTP_OK
+        );
 
         return $this->handleView($view);
     }

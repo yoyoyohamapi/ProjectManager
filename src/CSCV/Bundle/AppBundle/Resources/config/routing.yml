@@ -44,19 +44,22 @@ cscv_app_token_index:
     defaults: { _controller: CSCVAppBundle:Token:index }
 
 # 创建Token
-cscv_app_token_create:
-    path: /token/create
-    defaults: { _controller: CSCVAppBundle:Token:create }
+cscv_app_token_new:
+    path: /token/new
+    defaults: { _controller: CSCVAppBundle:Token:new }
+    methods: [POST]
 
 # 编辑Token
-cscv_app_token_edit:
-    path: /token/edit/{id}
-    defaults: { _controller: CSCVAppBundle:Token:edit }
+cscv_app_token_update:
+    path: /token/update
+    defaults: { _controller: CSCVAppBundle:Token:update }
+    methods: [PUT]
 
 # 删除Token
 cscv_app_token_remove:
-    path: /token/remove/{id}
+    path: /token/remove
     defaults: { _controller: CSCVAppBundle:Token:remove }
+    methods: [DELETE]
 
 
 cscv_app_test_sea:

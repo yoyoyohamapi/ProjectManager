@@ -10,8 +10,10 @@
 namespace CSCV\Bundle\AppBundle\Controller;
 
 
+use CSCV\Bundle\AppBundle\Utils\JsonMsgUtils;
 use CSCV\Bundle\StorageBundle\Document\ApiToken;
 use CSCV\Bundle\StorageBundle\Form\Type\ApiTokenType;
+use FOS\RestBundle\Util\Codes;
 use Symfony\Component\HttpFoundation\Request;
 
 class TokenController extends BaseController
@@ -25,17 +27,30 @@ class TokenController extends BaseController
     {
         $tokenService = $this->get('api_token_service');
         $tokens = $tokenService->findAll();
-
+        // 表单为添加Modal服务
+        $token = new ApiToken();
+        $newForm = $this->createForm(
+            new ApiTokenType(),
+            $token
+        );
+        $editForm = $this->createForm(
+            new ApiTokenType(),
+            $token
+        );
         return $this->render(
             '@CSCVApp/Token/index.html.twig',
-            array('tokens' => $tokens)
+            array(
+                'tokens' => $tokens,
+                'newForm' => $newForm->createView(),
+                'editForm' => $editForm->createView()
+            )
         );
     }
 
     /**
      * 创建Token
      */
-    public function createAction(Request $request)
+    public function newAction(Request $request)
     {
 
         $token = new ApiToken();
@@ -51,61 +66,79 @@ class TokenController extends BaseController
             $tokenStr = $tokenService->generateToken();
             $token->setToken($tokenStr);
             $tokenService->save($token);
-
-            return $this->redirectToRoute('cscv_app_token_index');
+            $jsonData[] = 'create a new token';
+            $statusCode = Codes::HTTP_CREATED;
+            $msg = JsonMsgUtils::SUCCESS_MSG;
+        } else {
+            $jsonData = JsonMsgUtils::FORM_INVALID_CB;
+            $msg = JsonMsgUtils::ERROR_MSG;
+            $statusCode = Codes::HTTP_BAD_REQUEST;
         }
 
-        return $this->render(
-            '@CSCVApp/Token/new.html.twig',
-            array('form' => $form->createView())
-        );
+        return $this->createJsonResponse($jsonData, $statusCode, $msg);
+
     }
 
     /**
      * 刷新Token
      * @param $id 待更新Token对象ID
      */
-    public function editAction($id)
+    public function updateAction(Request $request)
     {
         $tokenService = $this->get('api_token_service');
-        $token = $tokenService->findById($id)[0];
-
+        $tokenId = $request->get('token_id');
+        $request->request->remove('token_id');
+        $token = $tokenService->findById($tokenId);
         $form = $this->createForm(
             new ApiTokenType(),
-            $token
+            $token,
+            array(
+                'method' => 'PUT'
+            )
         );
-        $request = $this->get('request');
-        if ($request->getMethod() == 'POST') {
-            $form->handleRequest($request);
-            if ($form->isValid()) {
-                // 刷新Token
-                $newTokenStr = $tokenService->generateToken();
-                $token->setToken($newTokenStr);
-                $tokenService->save($token);
-
-                // 返回Token列表
-                return $this->redirectToRoute('cscv_app_token_index');
-            }
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            // 刷新Token
+            $newTokenStr = $tokenService->generateToken();
+            $token->setToken($newTokenStr);
+            $tokenService->save($token);
+            $jsonData = "refresh token";
+            $msg = JsonMsgUtils::SUCCESS_MSG;
+            $statusCode = Codes::HTTP_OK;
+        } else {
+            $jsonData = JsonMsgUtils::FORM_INVALID_CB;
+            $msg = JsonMsgUtils::ERROR_MSG;
+            $statusCode = Codes::HTTP_BAD_REQUEST;
         }
 
-        return $this->render(
-            '@CSCVApp/Token/edit.html.twig',
-            array('form' => $form->createView())
-        );
+        return $this->createJsonResponse($jsonData, $statusCode, $msg);
+
     }
 
     /**
      * 删除Token
      * @param $id 待删除对象Id
      */
-    public function removeAction($id)
+    public function removeAction(Request $request)
     {
         $tokenService = $this->get('api_token_service');
-        $token = $tokenService->findById($id)[0];
+        $token = $tokenService->findById($request->get('id'));
+        if (!$token) {
+            $jsonData = JsonMsgUtils::NO_SUCH_RESOURCE_CB;
+            $statusCode = Codes::HTTP_NOT_FOUND;
+            $msg = JsonMsgUtils::ERROR_MSG;
+        } else {
+            $tokenService->remove($token);
+            $jsonData = 'remove the apiToken successfully';
+            $statusCode = Codes::HTTP_NO_CONTENT;
+            $msg = JsonMsgUtils::SUCCESS_MSG;
+        }
 
-        $tokenService->remove($token);
-
-        return $this->redirectToRoute('cscv_app_token_index');
+        return $this->createJsonResponse(
+            $jsonData,
+            $statusCode,
+            $msg
+        );
     }
 
 }

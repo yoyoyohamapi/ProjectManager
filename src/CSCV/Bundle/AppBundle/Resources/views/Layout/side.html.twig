@@ -1,19 +1,38 @@
-<div id="sidebar" class="ui left vertical inverted sidebar menu">
-    <div class="sideContainer">
-        <div class="item">
-            <h3>操作</h3>
-        </div>
-        <a class="item" href="{{ path('cscv_app_image_index') }}">
-            <i class="tag icon"></i>
-            图像标定
-        </a>
-        <a class="item" href="{{ path('cscv_app_disease_index') }}">
-            <i class="treatment icon"></i>
-            疾病管理
-        </a>
-    </div>
-</div>
-{# 侧栏启动项 #}
-<div id="sideLaunch" class="ui large fixed button">
-    <i class="content icon"></i>
+{#<div id="sidebar" class="ui left vertical purple inverted sidebar menu">#}
+    {#<div class="sideContainer">#}
+        {#<div class="item">#}
+            {#<h3>操作</h3>#}
+        {#</div>#}
+        {#<a class="item" href="{{ path('cscv_app_image_index') }}">#}
+            {#<i class="tag icon"></i>#}
+            {#图像标定#}
+        {#</a>#}
+        {#<a class="item" href="{{ path('cscv_app_disease_index') }}">#}
+            {#<i class="treatment icon"></i>#}
+            {#疾病管理#}
+        {#</a>#}
+        {#<a class="item" href="{{ path('cscv_app_token_index') }}">#}
+            {#<i class="key icon"></i>#}
+            {#Api口令管理#}
+        {#</a>#}
+    {#</div>#}
+{#</div>#}
+{#&#123;&#35; 侧栏启动项 &#35;&#125;#}
+{#<div id="sideLaunch" class="ui big purple right attached fixed button">#}
+    {#<i class="content icon"></i>#}
+{#</div>#}
+
+<div id="sidebar" class="ui vertical labeled icon menu attached fixed">
+    <a class="red item" href="{{ path('cscv_app_image_index') }}">
+        <i class="tag icon"></i>
+        图像标定
+    </a>
+    <a class="teal item" href="{{ path('cscv_app_disease_index') }}">
+        <i class="treatment icon"></i>
+        疾病管理
+    </a>
+    <a class="green item" href="{{ path('cscv_app_token_index') }}">
+        <i class="key icon"></i>
+        口令管理
+    </a>
 </div>

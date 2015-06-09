@@ -77,7 +77,6 @@ class DiseaseController extends BaseController
             $form->handleRequest($request);
             if ($form->isValid()) {
                 $disService->save($disease);
-
                 // 返回疾病首页
                 return $this->redirectToRoute(
                     'cscv_app_disease_index',

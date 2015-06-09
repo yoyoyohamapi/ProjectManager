@@ -7,6 +7,8 @@ use CSCV\Bundle\StorageBundle\Service\ApiTokenService;
 use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 /**
  * Created by CSCV.
@@ -44,16 +46,16 @@ class TokenListener
                 $tokenStatus = $this->tokenService->isValid($this->tokenStr);
                 switch ($tokenStatus) {
                     case ApiTokenService::INVALID_TOKEN:
-                        throw new AccessDeniedHttpException('Invalid Token');
+                        throw new UnauthorizedHttpException('Invalid Token');
                         break;
                     case ApiTokenService::OUT_OF_DATE_TOKEN:
-                        throw new AccessDeniedHttpException('Token is out of date');
+                        throw new UnauthorizedHttpException('Token is out of date');
                         break;
                     case ApiTokenService::VALID_TOKEN:
                         break;
                 }
             } else {
-                throw new AccessDeniedHttpException('Invaid Header');
+                throw new BadRequestHttpException('Invaid Header');
             }
         }
     }

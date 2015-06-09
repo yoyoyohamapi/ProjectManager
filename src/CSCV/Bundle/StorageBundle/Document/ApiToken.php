@@ -10,7 +10,7 @@
 namespace CSCV\Bundle\StorageBundle\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
-
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @MongoDB\Document
  */
@@ -29,6 +29,7 @@ class ApiToken
 
     /**
      * @MongoDB\String
+     * @Assert\NotBlank()
      */
     private $appName; //应用名
 
@@ -39,6 +40,7 @@ class ApiToken
 
     /**
      * @MongoDB\Date
+     * @Assert\NotBlank()
      */
     private $limit; // 限制时间
 

@@ -58,7 +58,7 @@ class ApiTokenService extends BaseService
      */
     public function findById($id)
     {
-        return $this->repo->findById($id);
+        return $this->repo->find($id);
     }
 
     /**

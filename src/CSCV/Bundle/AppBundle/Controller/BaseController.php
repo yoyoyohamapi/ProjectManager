@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class BaseController extends Controller
 {
+
+
     /**
      * 返回JSON响应
      * @param $data :JSON数据

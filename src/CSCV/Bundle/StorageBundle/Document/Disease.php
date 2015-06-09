@@ -10,6 +10,7 @@
 namespace CSCV\Bundle\StorageBundle\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @MongoDB\Document
@@ -20,6 +21,7 @@ class Disease
     const DOC_NAME = "Disease";
     const INDEX_KEY = "index";
     const NAME_KEY = "name";
+    const DESC_KEY = "desc";
     const ETIOLOGY_KEY = "etiology";
     const MANIFEST_KEY = "manifest";
     const IDENTIFY_KEY = "identify";
@@ -31,13 +33,20 @@ class Disease
 
     /**
      * @MongoDB\Int
+     * @Assert\NotBlank()
      */
     private $index; // 疾病自定义索引
 
     /**
      * @MongoDB\String
+     * @Assert\NotBlank()
      */
     private $name; // 疾病名称
+
+    /**
+     * @MongoDB\String
+     */
+    private $desc; // 疾病简介
 
     /**
      * @MongoDB\String
@@ -212,5 +221,28 @@ class Disease
     public function __toString()
     {
         return strval($this->id);
+    }
+
+    /**
+     * Set desc
+     *
+     * @param string $desc
+     * @return self
+     */
+    public function setDesc($desc)
+    {
+        $this->desc = $desc;
+
+        return $this;
+    }
+
+    /**
+     * Get desc
+     *
+     * @return string $desc
+     */
+    public function getDesc()
+    {
+        return $this->desc;
     }
 }

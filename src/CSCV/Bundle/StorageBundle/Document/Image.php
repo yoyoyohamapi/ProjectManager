@@ -11,6 +11,7 @@ namespace CSCV\Bundle\StorageBundle\Document;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @MongoDB\Document
@@ -45,6 +46,7 @@ class Image
 
     /**
      * @MongoDB\Int
+     * @Assert\NotBlank()
      */
     private $location; // 发病部位
 

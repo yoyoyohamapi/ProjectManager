@@ -2,15 +2,48 @@
 {% block title %}Token浏览{% endblock %}
 
 {% block content %}
-    <div>
-        {% for token in tokens %}
-            <div>
-                <p>{{ token.appName }}</p>
-
-                <p>{{ token.token }}</p>
-
-                <p>{{ token.limit|date('Y-m-d') }}</p>
-            </div>
-        {% endfor %}
+    <div id="token_table">
+        <table class="ui table">
+            <thead>
+            <tr>
+                <th>应用名称</th>
+                <th>访问口令</th>
+                <th>口令时限</th>
+                <th>编辑</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for token in tokens %}
+                <tr data-id="{{ token.id }}">
+                    <td data-type="colAppName">{{ token.appName }}</td>
+                    <td data-type="colToken">{{ token.token }}</td>
+                    <td data-type="colLimit">{{ token.limit|date('Y/m/d') }}</td>
+                    <td>
+                        <div class="ui buttons">
+                            <div data-method='edit' class="ui positive button">修改</div>
+                            <div class="or"></div>
+                            <div data-method='remove' class="ui negative button">删除</div>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot>
+            <tr>
+                <th colspan="4">
+                    <div id="showNewModal" data-url="{{ path('cscv_app_token_new') }}"
+                         class="ui right floated small primary labeled icon button">
+                        <i class="add icon"></i> 添加口令
+                    </div>
+                </th>
+            </tr>
+            </tfoot>
+        </table>
+        {#新建,编辑以及删除提示模态框#}
+        {% include 'CSCVAppBundle:Token:modal.html.twig' %}
     </div>
+{% endblock %}
+{% block scripts %}
+    {% set script_action='token/index' %}
+    {{ parent() }}
 {% endblock %}

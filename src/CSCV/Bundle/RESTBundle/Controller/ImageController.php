@@ -5,6 +5,7 @@ namespace CSCV\Bundle\RESTBundle\Controller;
 use CSCV\Bundle\StorageBundle\Document\Image;
 use CSCV\Bundle\StorageBundle\Form\Type\ImageType;
 use CSCV\Bundle\StorageBundle\Service\ImageService;
+use FOS\RestBundle\Util\Codes;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\File\File;
@@ -46,7 +47,7 @@ class ImageController extends BaseController
      *  },
      *  statusCodes={
      *      200="请求成功",
-     *      404="无此图片"
+     *      204="无此图片"
      *  }
      * )
      */
@@ -55,12 +56,9 @@ class ImageController extends BaseController
         $image = $this->get('doctrine_mongodb')
             ->getRepository('CSCVStorageBundle:Image')
             ->find($id);
-
-
         $view = View::create()
-            ->setStatusCode(200)
+            ->setStatusCode(Codes::HTTP_OK)
             ->setData($image);
-
         return $this->get('fos_rest.view_handler')->handle($view);
     }
 
@@ -69,7 +67,11 @@ class ImageController extends BaseController
      *     resource=true,
      *     description="创建图像",
      *     input="image",
-     *     output="CSCV\Bundle\StorageBundle\Document\Image"
+     *     output="CSCV\Bundle\StorageBundle\Document\Image",
+     *     statusCodes={
+     *        201 = "创建成功",
+     *
+     *     }
      * )
      * @return mixed
      */
@@ -89,7 +91,7 @@ class ImageController extends BaseController
         } else {
         }
         $view = View::create()
-            ->setStatusCode(200)
+            ->setStatusCode(Codes::HTTP_CREATED)
             ->setData($image);
 
         return $this->get('fos_rest.view_handler')->handle($view);
