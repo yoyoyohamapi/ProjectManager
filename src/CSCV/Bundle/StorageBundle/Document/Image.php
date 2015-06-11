@@ -42,7 +42,6 @@ class Image extends BaseDocument
 
     /**
      * @MongoDB\Int
-     * @Assert\NotBlank()
      */
     private $location; // 发病部位
 
