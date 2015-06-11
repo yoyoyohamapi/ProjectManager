@@ -3,6 +3,7 @@
 namespace CSCV\Bundle\RESTBundle\Controller;
 
 use CSCV\Bundle\StorageBundle\Document\Image;
+use CSCV\Bundle\StorageBundle\Document\ImageFile;
 use CSCV\Bundle\StorageBundle\Form\Type\ImageType;
 use CSCV\Bundle\StorageBundle\Service\ImageService;
 use FOS\RestBundle\Util\Codes;
@@ -80,20 +81,39 @@ class ImageController extends BaseController
 
         $imageService = $this->get('image_service');
         $image = new Image();
+        // 获得图像
+        $tmp = new File($_FILES['file']['tmp_name']);
         $form = $this->createForm(
             new ImageType(),
             $image,
             array('csrf_protection' => false)
         );
+        $disService = $this->get('disease_service');
+        $form->add(
+            Image::DISEASE_KEY,
+            'document',
+            array(
+                'class' => 'CSCVStorageBundle:Disease',
+                'property' => 'name',
+                'choices' => $disService->findAllBase(),
+                'multiple' => false,
+            )
+        );
         $form->handleRequest($request);
         if ($form->isValid()) {
+            $fileInfo = array(
+                ImageService::FILE_INFO_TMP_KEY => $tmp,
+                ImageService::FILE_INFO_TYPE_KEY => ImageFile::IMAGE_SRC_TYPE
+            );
+            $imageService->setImgFile($image, $fileInfo);
             $imageService->save($image);
             $view = View::create()
                 ->setStatusCode(Codes::HTTP_CREATED)
                 ->setData($image);
         } else {
             $view = View::create()
-                ->setStatusCode(Codes::HTTP_BAD_REQUEST);
+                ->setStatusCode(Codes::HTTP_ACCEPTED)
+                ->setData($request->request->all());
         }
 
 

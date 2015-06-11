@@ -38,7 +38,7 @@ class Image extends BaseDocument
     /**
      * @MongoDB\Boolean
      */
-    private $cropped; // 是否剪切
+    private $cropped = false; // 是否剪切
 
     /**
      * @MongoDB\Int
