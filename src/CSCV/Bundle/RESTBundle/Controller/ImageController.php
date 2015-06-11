@@ -81,18 +81,21 @@ class ImageController extends BaseController
         $imageService = $this->get('image_service');
         $image = new Image();
         $form = $this->createForm(
-            new ImageType($this->get('disease_service')),
-            $image
+            new ImageType(),
+            $image,
+            array('csrf_protection' => false)
         );
         $form->handleRequest($request);
         if ($form->isValid()) {
-            //$file_contents = $request->get('file_contents');
-            $imageService->saveImg($image, null);
+            $imageService->save($image);
+            $view = View::create()
+                ->setStatusCode(Codes::HTTP_CREATED)
+                ->setData($image);
         } else {
+            $view = View::create()
+                ->setStatusCode(Codes::HTTP_BAD_REQUEST);
         }
-        $view = View::create()
-            ->setStatusCode(Codes::HTTP_CREATED)
-            ->setData($image);
+
 
         return $this->get('fos_rest.view_handler')->handle($view);
     }
@@ -111,6 +114,17 @@ class ImageController extends BaseController
         // 先获取对应图像
         $imageId = $request->get('image_id');
         $image = $imageService->find($imageId);
+        // 如果提供了疾病信息，部位信息则设置
+        $diseaseId = $request->get('disease_id');
+        $diseaseService = $this->get('disease_service');
+        $disease = $diseaseService->findById($diseaseId);
+        if ($disease) {
+            $image->setDisease($disease);
+        }
+        $location = $request->get('location');
+        if ($location) {
+            $image->setLocation($location);
+        }
         // 获得图像
         $tmp = new File($_FILES['file']['tmp_name']);
         // 再获得文件类型
