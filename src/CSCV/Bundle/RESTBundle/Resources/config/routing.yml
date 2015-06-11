@@ -1,13 +1,3 @@
-cscvrest_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: CSCVRESTBundle:Default:index }
-
-# 配置Product路由
-cscv_rest_products:
-    resource: CSCV\Bundle\RESTBundle\Controller\ProductController
-    prefix: /api
-    type: rest
-
 # 配置Image路由
 cscv_rest_images:
     resource: CSCV\Bundle\RESTBundle\Controller\ImageController

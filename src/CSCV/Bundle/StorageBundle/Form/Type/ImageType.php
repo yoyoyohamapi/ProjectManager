@@ -26,6 +26,7 @@ class ImageType extends AbstractType
                 Image::LOCATION_KEY,
                 'choice',
                 array(
+                    'label' => '发病部位',
                     'choices' => Location::getHashArray(),
                     'multiple' => false,
                 )

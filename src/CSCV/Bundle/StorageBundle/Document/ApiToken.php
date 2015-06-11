@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @MongoDB\Document
  */
-class ApiToken
+class ApiToken extends BaseDocument
 {
 
     const DOC_NAME = "ApiToken";
@@ -23,13 +23,9 @@ class ApiToken
     const LIMIT_KEY = "limit";
 
     /**
-     * @MongoDB\Id(strategy="auto")
-     */
-    private $id;
-
-    /**
      * @MongoDB\String
      * @Assert\NotBlank()
+     * @Assert\Length(max=10,maxMessage="应用名称不超过10个字符")
      */
     private $appName; //应用名
 
@@ -44,15 +40,6 @@ class ApiToken
      */
     private $limit; // 限制时间
 
-    /**
-     * Get id
-     *
-     * @return id $id
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set appName
@@ -122,4 +109,6 @@ class ApiToken
     {
         return $this->limit;
     }
+
+
 }

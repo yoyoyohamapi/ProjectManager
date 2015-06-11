@@ -11,12 +11,13 @@ namespace CSCV\Bundle\StorageBundle\Document;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @MongoDB\Document
  */
-class Image
+class Image extends BaseDocument
 {
 
     const DOC_NAME = 'Image';
@@ -28,11 +29,6 @@ class Image
     const FEATURE_COLOR_KEY = 'feature_color';
     const STATE_KEY = 'state';
     const IMAGE_FILES_KEY = 'imageFiles';
-
-    /**
-     * @MongoDB\Id(strategy="auto")
-     */
-    private $id;
 
     /**
      * @MongoDB\ReferenceOne(targetDocument="Disease",simple=true)
@@ -62,22 +58,12 @@ class Image
     private $feature_color; // 颜色特征
 
     /**
-     * @MongoDB\Date
-     */
-    private $created_at; // 创建时间
-
-    /**
-     * @MongoDB\Date
-     */
-    private $updated_at; // 更新时间
-
-    /**
      * @MongoDB\Int
      */
     private $state = State::UNSETTED; // 状态码
 
     /**
-     * @MongoDB\ReferenceMany(targetDocument="ImageFile",cascade="all")
+     * @MongoDB\ReferenceMany(targetDocument="ImageFile",cascade="all",strategy="set")
      */
     private $imageFiles = array();
 
@@ -87,61 +73,6 @@ class Image
         $this->imageFiles = new ArrayCollection();
     }
 
-    /**
-     * Set createdAt
-     *
-     * @param date $createdAt
-     * @return self
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->created_at = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * Get createdAt
-     *
-     * @return date $createdAt
-     */
-    public function getCreatedAt()
-    {
-        return $this->created_at;
-    }
-
-    /**
-     * Set updatedAt
-     *
-     * @param date $updatedAt
-     * @return self
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updated_at = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get updatedAt
-     *
-     * @return date $updatedAt
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updated_at;
-    }
-
-    /**
-     * Get id
-     *
-     * @return id $id
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
 
 
@@ -313,6 +244,28 @@ class Image
     public function getImageFiles()
     {
         return $this->imageFiles;
+    }
+
+    public function refreshOrAddFile(File $file, $type)
+    {
+        $imageFiles = $this->getImageFiles();
+        $dstFile = null;
+        // 遍历查看类型为type的文件是否存在
+        // 若存在，则刷新，否则新建
+        foreach ($imageFiles as $imageFile) {
+            if ($imageFile->getType() == $type) {
+                $dstFile = $imageFile;
+                break;
+            }
+        }
+        if (!$dstFile) {
+            $dstFile = new ImageFile();
+            $dstFile->setFile($file->getPathname());
+            $dstFile->setType($type);
+            $this->addImageFile($dstFile);
+        } else {
+            $dstFile->setFile($file->getPathname());
+        }
     }
 
 }

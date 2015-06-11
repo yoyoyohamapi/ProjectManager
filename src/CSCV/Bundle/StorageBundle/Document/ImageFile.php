@@ -14,18 +14,13 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 /**
  * @MongoDB\Document
  */
-class ImageFile
+class ImageFile extends BaseDocument
 {
     const DOC_NAME = "ImageFile";
     const FILE_KEY = "file";
     const IMAGE_SRC_TYPE = 'src';
     const IMAGE_CROP_TYPE = 'crop';
     const IMAGE_SEG_TYPE = 'seg';
-
-    /**
-     * @MongoDB\Id(strategy="auto")
-     */
-    private $id;
 
     /**
      * @MongoDB\String
@@ -36,16 +31,6 @@ class ImageFile
      * @MongoDB\File
      */
     private $file;
-
-    /**
-     * Get id
-     *
-     * @return id $id
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set type

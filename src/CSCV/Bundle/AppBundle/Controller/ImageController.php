@@ -9,6 +9,9 @@ use CSCV\Bundle\StorageBundle\Document\Image;
 use CSCV\Bundle\StorageBundle\Document\ImageFile;
 use CSCV\Bundle\StorageBundle\Document\State;
 use CSCV\Bundle\StorageBundle\Form\Type\ImageType;
+use CSCV\Bundle\StorageBundle\Service\ImageService;
+use Gedmo\Uploadable\FakeFileInfo;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -38,18 +41,18 @@ class ImageController extends BaseController
         );
         $form->handleRequest($request);
         if ($form->isValid()) {
+            $fileName = ImageService::IMAGE_DIR.'//tmp//'.$request->get('path');
             $imageService = $this->get('image_service');
             // 设置图像标定状态为True
             $image->setState(State::SETTED);
             $fileInfo = array(
-                'name' => $request->get('path'),
-                'type' => ImageFile::IMAGE_SRC_TYPE
+                ImageService::FILE_INFO_TMP_KEY => new File($fileName),
+                ImageService::FILE_INFO_TYPE_KEY => ImageFile::IMAGE_SRC_TYPE
             );
-            $imageService->saveImg($image, $fileInfo);
+            $imageService->setImgFile($image, $fileInfo);
             $response = array(
                 'success' => true
             );
-
             return $this->createJsonResponse(
                 $response,
                 JsonResponse::HTTP_OK,

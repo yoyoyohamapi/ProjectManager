@@ -20,8 +20,8 @@ class ApiTokenType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add(ApiToken::APP_NAME_KEY, 'text')
-            ->add(ApiToken::LIMIT_KEY, 'date');
+            ->add(ApiToken::APP_NAME_KEY, 'text', array('label' => '应用名称'))
+            ->add(ApiToken::LIMIT_KEY, 'date', array('label' => '到期时间'));
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

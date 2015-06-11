@@ -42,8 +42,7 @@ class DiseaseService extends BaseService
     public function findAllBase()
     {
         $diseases = $this->builder
-            ->select(Disease::INDEX_KEY, Disease::INDEX_KEY, Disease::NAME_KEY)
-            ->sort(Disease::INDEX_KEY, 'ASC')
+            ->select('_id', Disease::NAME_KEY)
             ->getQuery()
             ->execute();
 

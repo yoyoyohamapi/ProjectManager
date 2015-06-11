@@ -15,31 +15,25 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @MongoDB\Document
  */
-class Disease
+class Disease extends BaseDocument
 {
 
     const DOC_NAME = "Disease";
-    const INDEX_KEY = "index";
     const NAME_KEY = "name";
     const DESC_KEY = "desc";
     const ETIOLOGY_KEY = "etiology";
-    const MANIFEST_KEY = "manifest";
+    const SYMPTOM_KEY = "symptom";
     const IDENTIFY_KEY = "identify";
-    const DIAGNOSE_KEY = "diagnose";
-    /**
-     * @MongoDB\Id(strategy="auto")
-     */
-    private $id;
-
-    /**
-     * @MongoDB\Int
-     * @Assert\NotBlank()
-     */
-    private $index; // 疾病自定义索引
+    const PREVENT_KEY = "prevent";
+    const COMPLICATION_KEY = "complication";
+    const THERAPIES_KEY = "therapies";
 
     /**
      * @MongoDB\String
      * @Assert\NotBlank()
+     * @Assert\Length(
+     * max=10,
+     * maxMessage="疾病名称不能超过10个字符")
      */
     private $name; // 疾病名称
 
@@ -56,51 +50,28 @@ class Disease
     /**
      * @MongoDB\String
      */
-    private $manifest; // 临床表现
+    private $symptom; // 典型症状
 
     /**
      * @MongoDB\String
      */
-    private $diagnose; // 诊断
+    private $prevent; // 预防
 
     /**
      * @MongoDB\String
      */
     private $identify; // 鉴别
 
+    /**
+     * @MongoDB\String
+     */
+    private $complication; // 并发症
 
     /**
-     * Get id
-     *
-     * @return id $id
+     * @MongoDB\String
      */
-    public function getId()
-    {
-        return $this->id;
-    }
+    private $therapies; // 治疗方法
 
-    /**
-     * Set index
-     *
-     * @param int $index
-     * @return self
-     */
-    public function setIndex($index)
-    {
-        $this->index = $index;
-
-        return $this;
-    }
-
-    /**
-     * Get index
-     *
-     * @return int $index
-     */
-    public function getIndex()
-    {
-        return $this->index;
-    }
 
     /**
      * Set name
@@ -149,52 +120,6 @@ class Disease
     }
 
     /**
-     * Set manifest
-     *
-     * @param string $manifest
-     * @return self
-     */
-    public function setManifest($manifest)
-    {
-        $this->manifest = $manifest;
-
-        return $this;
-    }
-
-    /**
-     * Get manifest
-     *
-     * @return string $manifest
-     */
-    public function getManifest()
-    {
-        return $this->manifest;
-    }
-
-    /**
-     * Set diagnose
-     *
-     * @param string $diagnose
-     * @return self
-     */
-    public function setDiagnose($diagnose)
-    {
-        $this->diagnose = $diagnose;
-
-        return $this;
-    }
-
-    /**
-     * Get diagnose
-     *
-     * @return string $diagnose
-     */
-    public function getDiagnose()
-    {
-        return $this->diagnose;
-    }
-
-    /**
      * Set identify
      *
      * @param string $identify
@@ -220,7 +145,7 @@ class Disease
 
     public function __toString()
     {
-        return strval($this->id);
+        return strval($this->getId());
     }
 
     /**
@@ -244,5 +169,96 @@ class Disease
     public function getDesc()
     {
         return $this->desc;
+    }
+
+
+    /**
+     * Set symptom
+     *
+     * @param string $symptom
+     * @return self
+     */
+    public function setSymptom($symptom)
+    {
+        $this->symptom = $symptom;
+        return $this;
+    }
+
+    /**
+     * Get symptom
+     *
+     * @return string $symptom
+     */
+    public function getSymptom()
+    {
+        return $this->symptom;
+    }
+
+    /**
+     * Set prevent
+     *
+     * @param string $prevent
+     * @return self
+     */
+    public function setPrevent($prevent)
+    {
+        $this->prevent = $prevent;
+
+        return $this;
+    }
+
+    /**
+     * Get prevent
+     *
+     * @return string $prevent
+     */
+    public function getPrevent()
+    {
+        return $this->prevent;
+    }
+
+    /**
+     * Set complication
+     *
+     * @param string $complication
+     * @return self
+     */
+    public function setComplication($complication)
+    {
+        $this->complication = $complication;
+
+        return $this;
+    }
+
+    /**
+     * Get complication
+     *
+     * @return string $complication
+     */
+    public function getComplication()
+    {
+        return $this->complication;
+    }
+
+    /**
+     * Set therapies
+     *
+     * @param string $therapies
+     * @return self
+     */
+    public function setTherapies($therapies)
+    {
+        $this->therapies = $therapies;
+        return $this;
+    }
+
+    /**
+     * Get therapies
+     *
+     * @return string $therapies
+     */
+    public function getTherapies()
+    {
+        return $this->therapies;
     }
 }

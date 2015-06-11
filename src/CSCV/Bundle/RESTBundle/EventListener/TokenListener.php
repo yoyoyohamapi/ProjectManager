@@ -55,7 +55,7 @@ class TokenListener
                         break;
                 }
             } else {
-                throw new BadRequestHttpException('Invaid Header');
+                throw new BadRequestHttpException('Invalid Header');
             }
         }
     }

@@ -108,17 +108,22 @@ class ImageController extends BaseController
     public function uploadAction(Request $request)
     {
         $imageService = $this->get('image_service');
-        $image = new Image();
+        // 先获取对应图像
+        $imageId = $request->get('image_id');
+        $image = $imageService->find($imageId);
+        // 获得图像
         $tmp = new File($_FILES['file']['tmp_name']);
-        $fileType = $request->get('fileType');
+        // 再获得文件类型
+        $fileType = $request->get('type');
+        // 新建文件名
         $fileName = md5(uniqid(rand())).".jpg";
-        //将图像暂存至unset
+        //将图像暂存至tmp
         $file = $tmp->move(ImageService::IMAGE_DIR."//tmp", $fileName);
         $fileInfo = array(
-            'name' => $fileName,
-            'type' => $fileType
+            ImageService::FILE_INFO_TMP_KEY => $file,
+            ImageService::FILE_INFO_TYPE_KEY => $fileType
         );
-        $imageService->saveImg($image, $fileInfo);
+        $imageService->setImgFile($image, $fileInfo);
         $view = View::create()
             ->setStatusCode(200)
             ->setData($image);

@@ -61,12 +61,3 @@ cscv_app_token_remove:
     defaults: { _controller: CSCVAppBundle:Token:remove }
     methods: [DELETE]
 
-
-cscv_app_test_sea:
-    path:    /test/sea
-    defaults: { _controller:CSCVAppBundle:Test:sea }
-
-cscv_app_test_form:
-    path: /test/form
-    defaults: { _controller:CSCVAppBundle:Test:form}
-

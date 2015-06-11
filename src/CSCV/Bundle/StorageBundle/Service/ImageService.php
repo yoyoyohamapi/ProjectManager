@@ -2,8 +2,6 @@
 namespace CSCV\Bundle\StorageBundle\Service;
 
 use CSCV\Bundle\StorageBundle\Document\Image;
-use CSCV\Bundle\StorageBundle\Document\ImageFile;
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -18,6 +16,9 @@ class ImageService extends BaseService
 {
     const DOC_NAME = 'CSCVStorageBundle:Image';
     const IMAGE_DIR = 'storage//images';
+
+    const FILE_INFO_TMP_KEY = "tmp";
+    const FILE_INFO_TYPE_KEY = "type";
 
     private $repo;
     private $builder; // QueryBuilder
@@ -86,22 +87,18 @@ class ImageService extends BaseService
     }
 
     /**
+     * 保存图像文件
      * @param $image 待保存图像对象
      * @param $fileInfo 文件信息
-     *        $fileInfo['name']: 图像
+     *        $fileInfo['tmp']: 图像文件
      *        $fileInfo['type']: 图像类型（原图，裁剪后图，分割后图）
      */
-    public function saveImg(Image $image, $fileInfo)
+    public function setImgFile(Image $image, $fileInfo)
     {
-        // 设置创建时间及更新时间
-        $datetime = new \MongoDate();
-        $image->setCreatedAt($datetime);
-        $image->setUpdatedAt($datetime);
         // 转移文件 ---> /疾病/日期(精确到)/唯一码
         if (!empty($fileInfo)) {
-            $finder = new Finder();
-            $finder->name($fileInfo['name']);
-            $finder->files()->in(ImageService::IMAGE_DIR.'//tmp');
+            $tmp = $fileInfo[ImageService::FILE_INFO_TMP_KEY];
+            $type = $fileInfo[ImageService::FILE_INFO_TYPE_KEY];
             $date = date("Y/m");
             /* 文件保存路径:
                 若设置了疾病类型：基础路径/疾病ID/图像类型/日期
@@ -110,14 +107,9 @@ class ImageService extends BaseService
             $disDir = empty($image->getDisease()) ?
                 'unset' : $image->getDisease();
             $dir = ImageService::IMAGE_DIR.'//'.$disDir.'//'.$fileInfo['type'].'//'.$date;
-            foreach ($finder as $file) {
-                $tmp = new File($file->getRealPath());
-                $dst = $tmp->move($dir, $fileInfo['name']);
-                $imageFile = new ImageFile();
-                $imageFile->setFile($dst->getPathname());
-                $imageFile->setType($fileInfo['type']);
-                $image->addImageFile($imageFile);
-            }
+            $dst = $tmp->move($dir, $fileInfo[ImageService::FILE_INFO_TMP_KEY]->getFilename());
+            // 刷新原图像文件列表
+            $image->refreshOrAddFile($dst, $type);
         }
         parent::save($image);
     }

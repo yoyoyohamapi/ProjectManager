@@ -89,7 +89,6 @@ class ApiTokenService extends BaseService
         else {
             $token = $tokens[0];
             $now = date(ApiTokenService::DATE_FORMAT);
-
             return strtotime($now) > strtotime(
                 $token->getLimit()->format(ApiTokenService::DATE_FORMAT)
             ) ? ApiTokenService::OUT_OF_DATE_TOKEN : ApiTokenService::VALID_TOKEN;

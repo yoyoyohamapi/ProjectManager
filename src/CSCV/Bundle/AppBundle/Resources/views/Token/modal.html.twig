@@ -10,11 +10,11 @@
         <form class="ui form" action="{{ path('cscv_app_token_new') }}" {{ form_enctype(newForm) }}
               method="POST">
             <div class="field">
-                <label>应用名称</label>
+                <label>{{ form_label(newForm.appName) }}</label>
                 {{ form_widget(newForm.appName,{'attr':{'placeholder':'请填写应用名称'} }) }}
             </div>
             <div class="field">
-                <label>口令日期</label>
+                <label>{{ form_label(newForm.limit) }}</label>
                 {{ form_widget(newForm.limit) }}
             </div>
             <div class="field" style="display: none;">
@@ -42,11 +42,11 @@
     <div class="content">
         <form class="ui form" action="{{ path('cscv_app_token_new') }}" {{ form_enctype(editForm) }} method="POST">
             <div class="field">
-                <label>应用名称</label>
+                <label>{{ form_label(editForm.appName) }}</label>
                 {{ form_widget(editForm.appName,{'attr':{'placeholder':'请填写应用名称'} }) }}
             </div>
             <div class="field">
-                <label>口令日期</label>
+                <label>{{ form_label(editForm.limit) }}</label>
                 {{ form_widget(editForm.limit) }}
 
             </div>
