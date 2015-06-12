@@ -89,10 +89,9 @@ class ImageController extends BaseController
         $dm = $this->get('doctrine_mongodb')->getManager();
         $imagesService = $this->get('image_service');
         //$images = $imagesService->findAll();
-        $image = $imagesService->find('55727866e7ec7be14a0041a7');
-        $files = $image->getImageFiles()->toArray();
-        header('Content-type: image/png');
-        echo $files[0]->getFile()->getBytes();
+        $image = $imagesService->find('5577f0c1e7ec7bb7020041d3');
+        echo $image->getLocation();
+        exit;
 
     }
 
