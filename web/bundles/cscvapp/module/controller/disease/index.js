@@ -7,19 +7,9 @@
  */
 define(function (require, exports, module) {
 
+    var DiseaseCards = require('./DiseaseCards.js');
     exports.run = function () {
-        heightAdjust();
-
-        $(window).resize(function () {
-            heightAdjust();
-        });
+        var diseaseCards = new DiseaseCards();
     }
 
-    function heightAdjust() {
-        // 设置添加卡片高度
-        var height =
-            $("#list").children().length == 1 ?
-                300 : $("#list .card:first").height();
-        $("#add").css('height', parseInt(height));
-    }
 });

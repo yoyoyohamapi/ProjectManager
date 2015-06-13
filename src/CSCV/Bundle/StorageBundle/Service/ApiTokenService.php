@@ -56,7 +56,7 @@ class ApiTokenService extends BaseService
      * @param $id 待查询Id
      * @return mixed Id对应的ApiToken
      */
-    public function findById($id)
+    public function find($id)
     {
         return $this->repo->find($id);
     }

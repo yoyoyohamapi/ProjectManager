@@ -22,6 +22,7 @@ seajs.config({
         "jquery-file-upload-image": "jquery-file-upload/9.9.2/js/jquery.fileupload-image.js",
         "jquery-file-upload-process": "jquery-file-upload/9.9.2/js/jquery.fileupload-process.js",
         "jquery-file-upload-validate": "jquery-file-upload/9.9.2/js/jquery.fileupload-validate.js",
+        "jquery-easing": "jquery-easing/1.3.0/jquery.easing.min.js",
         "load-image": "load-image/1.13.0/js/load-image.js",
         "load-image-meta": "load-image/1.13.0/js/load-image-meta.js",
         "load-image-orientation": "load-image/1.13.0/js/load-image-orientation.js",
@@ -30,6 +31,8 @@ seajs.config({
         "load-image-ios": "load-image/1.13.0/js/load-image-ios.js",
         "canvas-to-blob": "canvas-to-blob/master/canvas-to-blob.min.js",
         "arale-switchable": "arale-switchable/1.1.1/switchable.js",
+        "fullPage": "fullPage/jquery.fullPage.js",
+        "tinymce": "tinymce/tinymce.min.js",
         'map': [
             [/^(.*\.(?:css|js))(.*)$/i, '$1?20140801']
         ]

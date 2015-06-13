@@ -1,6 +1,5 @@
 {% extends 'CSCVAppBundle:Token:layout.html.twig' %}
 {% block title %}Token浏览{% endblock %}
-
 {% block content %}
     <div id="token_table">
         <table class="ui table">
@@ -42,6 +41,7 @@
         {#新建,编辑以及删除提示模态框#}
         {% include 'CSCVAppBundle:Token:modal.html.twig' %}
     </div>
+
 {% endblock %}
 {% block scripts %}
     {% set script_action='token/index' %}

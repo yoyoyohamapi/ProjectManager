@@ -18,11 +18,16 @@
     {% if noSideHeader is not defined %}
         <div id="paddingHolder" style="padding-top:150px"></div>
     {% endif %}
+    {% if fullScreen is not defined %}
     <div id="main" class="mainContainer">
-        {% block content %}
-        {% endblock %}
+        {% else %}
+        <div style="width: 100%">
+            {% endif %}
+            {% block content %}
+            {% endblock %}
+        </div>
+
     </div>
-</div>
 {% if footer is defined %}
     {% include "CSCVAppBundle:Layout:footer.html.twig" %}
 {% endif %}

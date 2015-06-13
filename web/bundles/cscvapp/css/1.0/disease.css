@@ -5,3 +5,39 @@
 #add .content {
     font-size: 72px;
 }
+
+#editor {
+    background: rgb(27, 188, 155);
+
+}
+
+#editor .section {
+    padding-left: 15%;
+    padding-right: 15%;
+}
+
+#title {
+    padding: 80px;
+    position: fixed;
+}
+
+#title h1 {
+    color: white;
+    font-size: 4rem;
+}
+
+#nameSlide input {
+    font-size: 2.5rem;
+}
+
+#submit {
+    position: fixed;
+    bottom: 5%;
+    right: 5%;
+}
+
+#showBackModal {
+    position: fixed;
+    bottom: 5%;
+    left: 5%;
+}

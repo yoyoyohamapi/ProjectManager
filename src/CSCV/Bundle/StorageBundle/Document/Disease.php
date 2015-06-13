@@ -40,37 +40,37 @@ class Disease extends BaseDocument
     /**
      * @MongoDB\String
      */
-    private $desc; // 疾病简介
+    private $desc = ""; // 疾病简介
 
     /**
      * @MongoDB\String
      */
-    private $etiology; // 病因
+    private $etiology = ""; // 病因
 
     /**
      * @MongoDB\String
      */
-    private $symptom; // 典型症状
+    private $symptom = ""; // 典型症状
 
     /**
      * @MongoDB\String
      */
-    private $prevent; // 预防
+    private $prevent = ""; // 预防
 
     /**
      * @MongoDB\String
      */
-    private $identify; // 鉴别
+    private $identify = ""; // 鉴别
 
     /**
      * @MongoDB\String
      */
-    private $complication; // 并发症
+    private $complication = ""; // 并发症
 
     /**
      * @MongoDB\String
      */
-    private $therapies; // 治疗方法
+    private $therapies = ""; // 治疗方法
 
 
     /**

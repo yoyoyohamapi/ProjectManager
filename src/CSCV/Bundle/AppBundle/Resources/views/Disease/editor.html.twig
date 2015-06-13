@@ -1,0 +1,128 @@
+{% extends '@CSCVApp/Disease/layout.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link type="text/css" rel="stylesheet" href="{{ asset('bundles/cscvapp/css/1.0/jquery.fullPage.css') }}"/>
+{% endblock %}
+{% block title %}新建疾病{% endblock %}
+
+{% set noSideHeader=true %}
+{% set fullScreen=true %}
+{% block content %}
+    <div id="editor">
+        <div id="title">
+            <h1 id="nameHeader" class="ui header">
+                1.{{ form_label(form.name) }}
+            </h1>
+
+            <h1 id="descHeader" class="ui header" style="display: none">
+                2.{{ form_label(form.desc) }}
+            </h1>
+
+            <h1 id="symptomHeader" class="ui header" style="display: none">
+                3.{{ form_label(form.symptom) }}
+            </h1>
+
+            <h1 id="etiologyHeader" class="ui header" style="display: none">
+                4.{{ form_label(form.etiology) }}
+            </h1>
+
+            <h1 id="preventHeader" class="ui header" style="display: none">
+                5.{{ form_label(form.prevent) }}
+            </h1>
+
+            <h1 id="identifyHeader" class="ui header" style="display: none">
+                6.{{ form_label(form.identify) }}
+            </h1>
+
+            <h1 id="therapiesHeader" class="ui header" style="display: none">
+                7.{{ form_label(form.therapies) }}
+            </h1>
+
+            <h1 id="complicationHeader" class="ui header" style="display: none">
+                8.{{ form_label(form.complication) }}
+            </h1>
+        </div>
+        {{ form_start(form, {'attr': {'class': 'ui form'}}) }}
+        <div class="section">
+            {#疾病名称#}
+            <div id="nameSlide" class="slide" style="margin-top:-100px">
+                <div class="field" style="padding-left: 30%;padding-right: 30%">{{ form_widget(form.name) }}</div>
+            </div>
+            {#疾病简介#}
+            <div id="descSlide" class="slide">
+                <div class="field">{{ form_widget(form.desc) }}</div>
+            </div>
+            {#典型症状#}
+            <div id="symptomSlide" class="slide">
+                <div class="field">{{ form_widget(form.symptom) }}</div>
+            </div>
+            {#发病病因#}
+            <div id="etiologySlide" class="slide">
+                <div class="field">{{ form_widget(form.etiology) }}</div>
+            </div>
+            {#预防#}
+            <div id="preventSlide" class="slide">
+                <div class="field">{{ form_widget(form.prevent) }}</div>
+            </div>
+            {#鉴别#}
+            <div id="identifySlide" class="slide">
+                <div class="field">{{ form_widget(form.identify) }}</div>
+            </div>
+            {#治疗方法#}
+            <div id="therapiesSlide" class="slide">
+                <div class="field">{{ form_widget(form.therapies) }}</div>
+            </div>
+            {#并发症#}
+            <div id="complicationSlide" class="slide">
+                <div class="field">{{ form_widget(form.complication) }}</div>
+            </div
+            <input type="submit" value="submit">
+        </div>
+        <div style="display: none">
+            {{ form_rest(form) }}
+        </div>
+        {#提交按钮#}
+        <button alt="创建" id="submit" class="circular ui huge pink icon button" type="submit">
+            <i class="ui checkmark icon"></i>
+        </button>
+        {# 返回按钮 #}
+        <button alt="返回" id="showBackModal" type="button" class="circular ui huge black icon button">
+            <i class="ui remove icon"></i>
+        </button>
+        {{ form_end(form) }}
+    </div>
+    {#确认返回#}
+    {# 删除提示Modal #}
+    <div id="backModal" class="ui small basic modal" data-url="{{ path('cscv_app_disease_index') }}">
+        <i class="close icon"></i>
+
+        <div class="header">
+            确认返回
+        </div>
+        <div class="content">
+            <div class="image">
+                <i class="warning sign icon"></i>
+            </div>
+            <div class="description">
+                <p>确认返回到疾病列表？你所做的操作将不会被保存</p>
+            </div>
+        </div>
+        <div class="actions">
+            <div class="two fluid ui inverted buttons">
+                <div class="ui red basic inverted button">
+                    <i class="remove icon"></i>
+                    No
+                </div>
+                <div id="backAction" class="ui green basic inverted button">
+                    <i class="checkmark icon"></i>
+                    Yes
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    {% set script_action='disease/edit' %}
+    {{ parent() }}
+{% endblock %}
+

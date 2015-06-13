@@ -38,6 +38,12 @@ cscv_app_disease_edit:
     path: /disease/edit/{id}
     defaults: { _controller: CSCVAppBundle:Disease:edit}
 
+# 删除疾病
+cscv_app_disease_remove:
+    path: /disease/remove
+    defaults: { _controller: CSCVAppBundle:Disease:remove }
+    methods: [DELETE]
+
 # 显示Token
 cscv_app_token_index:
     path: /token

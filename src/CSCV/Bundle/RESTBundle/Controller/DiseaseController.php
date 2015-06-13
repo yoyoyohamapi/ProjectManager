@@ -45,7 +45,7 @@ class DiseaseController extends BaseController
     public function getDiseaseAction($id)
     {
         $disease = $this->get('disease_service')
-            ->findById($id);
+            ->find($id);
         $view = $this->view(
             $disease,
             Codes::HTTP_OK

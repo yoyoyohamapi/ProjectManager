@@ -10,8 +10,10 @@
 namespace CSCV\Bundle\AppBundle\Controller;
 
 
+use CSCV\Bundle\AppBundle\Utils\JsonMsgUtils;
 use CSCV\Bundle\StorageBundle\Document\Disease;
 use CSCV\Bundle\StorageBundle\Form\Type\DiseaseType;
+use FOS\RestBundle\Util\Codes;
 use Symfony\Component\HttpFoundation\Request;
 
 class DiseaseController extends BaseController
@@ -47,12 +49,12 @@ class DiseaseController extends BaseController
     public function showAction($id)
     {
         $disService = $this->get('disease_service');
-        $diseases = $disService->findById($id);
+        $diseases = $disService->find($id);
         if (!empty($diseases)) {
             return $this->render(
                 '@CSCVApp/Disease/show.html.twig',
                 array(
-                    'disease' => $diseases[0]
+                    'disease' => $diseases
                 )
             );
         }
@@ -66,7 +68,7 @@ class DiseaseController extends BaseController
     public function editAction($id)
     {
         $disService = $this->get('disease_service');
-        $disease = $disService->findById($id)[0];
+        $disease = $disService->find($id);
         $form = $this->createForm(
             new DiseaseType(),
             $disease
@@ -88,7 +90,7 @@ class DiseaseController extends BaseController
         }
 
         return $this->render(
-            '@CSCVApp/Disease/edit.html.twig',
+            '@CSCVApp/Disease/editor.html.twig',
             array(
                 'form' => $form->createView()
             )
@@ -116,10 +118,33 @@ class DiseaseController extends BaseController
         }
 
         return $this->render(
-            '@CSCVApp/Disease/new.html.twig',
+            '@CSCVApp/Disease/editor.html.twig',
             array(
                 'form' => $form->createView()
             )
+        );
+    }
+
+    public function removeAction(Request $request)
+    {
+        $id = $request->get('id');
+        $disService = $this->get('disease_service');
+        $disease = $disService->find($id);
+        if ($disease) {
+            $disService->remove($disease);
+            $jsonData = "remove success fully";
+            $statusCode = Codes::HTTP_OK;
+            $msg = JsonMsgUtils::SUCCESS_MSG;
+        } else {
+            $jsonData = JsonMsgUtils::NO_SUCH_RESOURCE_CB;
+            $statusCode = Codes::HTTP_BAD_REQUEST;
+            $msg = JsonMsgUtils::ERROR_MSG;
+        }
+
+        return $this->createJsonResponse(
+            $jsonData,
+            $statusCode,
+            $msg
         );
     }
 

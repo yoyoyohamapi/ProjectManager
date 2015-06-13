@@ -178,3 +178,4 @@ fos_user:
 jms_security_extra:
     util:
         secure_random: ~
+

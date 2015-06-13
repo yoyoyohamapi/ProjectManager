@@ -88,7 +88,7 @@ class TokenController extends BaseController
         $tokenService = $this->get('api_token_service');
         $tokenId = $request->get('token_id');
         $request->request->remove('token_id');
-        $token = $tokenService->findById($tokenId);
+        $token = $tokenService->find($tokenId);
         $form = $this->createForm(
             new ApiTokenType(),
             $token,
@@ -122,7 +122,7 @@ class TokenController extends BaseController
     public function removeAction(Request $request)
     {
         $tokenService = $this->get('api_token_service');
-        $token = $tokenService->findById($request->get('id'));
+        $token = $tokenService->find($request->get('id'));
         if (!$token) {
             $jsonData = JsonMsgUtils::NO_SUCH_RESOURCE_CB;
             $statusCode = Codes::HTTP_NOT_FOUND;
@@ -130,7 +130,7 @@ class TokenController extends BaseController
         } else {
             $tokenService->remove($token);
             $jsonData = 'remove the apiToken successfully';
-            $statusCode = Codes::HTTP_NO_CONTENT;
+            $statusCode = Codes::HTTP_OK;
             $msg = JsonMsgUtils::SUCCESS_MSG;
         }
 

@@ -53,7 +53,7 @@ class DiseaseService extends BaseService
      * 根据Id的返回疾病
      * @param $id Id
      */
-    public function findById($id)
+    public function find($id)
     {
         return $this->repo->find($id);
     }

@@ -28,7 +28,7 @@ class AppKernel extends Kernel
             new CSCV\Bundle\StorageBundle\CSCVStorageBundle(),
             new \JMS\AopBundle\JMSAopBundle(),
             new \JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
-            new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle()
+            new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
