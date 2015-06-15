@@ -34,6 +34,7 @@ define(function (require, exports, module) {
             this.element.fullpage({
                 slidesNavigation: true,
                 loopHorizontal: false,
+                navigationColor: '#fff',
                 onSlideLeave: function (anchorLink, index, slideIndex, direction, nextSlideIndex) {
                     titles[slideIndex].fadeOut(function () {
                             titles[nextSlideIndex].fadeIn();

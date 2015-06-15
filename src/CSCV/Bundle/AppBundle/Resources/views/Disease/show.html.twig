@@ -3,8 +3,6 @@
 {% block content %}
     <div id="diseaseShow" class="ui items" style="text-align: left">
         <div id="desc" class="item">
-            <a name="desc" class="anchor"></a>
-
             <div class="content">
                 <a class="header">
                     疾病简介
@@ -17,8 +15,6 @@
         </div>
 
         <div id="etiology" name="etiology" class="item">
-            <a name="etiology" class="anchor"></a>
-
             <div class="content">
                 <a class="header">
                     病因
@@ -31,8 +27,6 @@
         </div>
 
         <div id="symptom" class="item">
-            <a name="symptom" class="anchor"></a>
-
             <div class="content">
                 <a class="header">
                     症状
@@ -47,8 +41,6 @@
         </div>
 
         <div id="prevent" class="item">
-            <a name="prevent" class="anchor"></a>
-
             <div class="content">
                 <a class="header">
                     预防
@@ -61,8 +53,6 @@
         </div>
 
         <div id="identify" class="item">
-            <a name="identify" class="anchor"></a>
-
             <div class="content">
                 <a class="header">
                     鉴别
@@ -75,8 +65,6 @@
         </div>
 
         <div id="complication" class="item">
-            <a name="complication" class="anchor"></a>
-
             <div class="content">
                 <a class="header">
                     并发症
@@ -89,8 +77,6 @@
         </div>
 
         <div id="therapies" class="item">
-            <a name="therapies" class="anchor"></a>
-
             <div class="content">
                 <a class="header">
                     治疗
@@ -107,29 +93,29 @@
         <a class="header item">
             {{ disease.name }}
         </a>
-        <a href="#desc" class="active teal item">
+        <a data-id="#desc" class="active teal item">
             疾病简介
         </a>
-        <a href="#etiology" class="item">
+        <a data-id="#etiology" class="item">
             病因
         </a>
-        <a href="#symptom" class="item">
+        <a data-id="#symptom" class="item">
             典型症状
         </a>
-        <a href="#prevent" class="item">
+        <a data-id="#prevent" class="item">
             预防
         </a>
-        <a href="#identify" class="item">
+        <a data-id="#identify" class="item">
             鉴别
         </a>
-        <a href="#complication" class="item">
+        <a data-id="#complication" class="item">
             并发症
         </a>
-        <a href="#therapies" class="item">
+        <a data-id="#therapies" class="item">
             治疗方法
         </a>
 
-        <div class="item">
+        <div id="edit" class="item">
             <a class="ui red button" href="{{ path('cscv_app_disease_edit', {'id': disease.id}) }}">
                 编辑
             </a>
