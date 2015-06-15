@@ -14,6 +14,5 @@ define(function (require, exports, module) {
         //滚动到对应疾病位置
         $('html, body').animate(
             {scrollTop: toDisease.position().top}, 300);
-
     }
 });

@@ -75,10 +75,22 @@ a.anchor {
     #title h1 {
         font-size: 4rem;
     }
+
+    .section .slide textarea {
+        height: 1500px;
+        width: 40%;
+    }
 }
 
 @media only screen and (max-width: 1400px) {
     #title h1 {
         font-size: 2rem;
     }
+
+    .section .slide textarea {
+        height: 300px;
+        width: 70%;
+
+    }
+
 }
