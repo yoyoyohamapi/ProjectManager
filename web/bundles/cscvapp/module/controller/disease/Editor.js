@@ -54,10 +54,12 @@ define(function (require, exports, module) {
             });
         },
         initTinyMCE: function () {
+            // 获得当前屏幕高度
+            var height = window.screen.height;
             $("textarea").each(function () {
                 tinymce.init({
                     selector: "#" + $(this).attr('id'),
-                    height: 500,
+                    height: height * 0.4,
                     menubar: false,
                     plugins: [
                         "advlist autolink lists link image charmap print preview anchor",
