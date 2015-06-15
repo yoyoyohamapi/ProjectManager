@@ -1,10 +1,143 @@
 {% extends '@CSCVApp/Disease/layout.html.twig' %}
 {% block title %}{{ disease.name }}{% endblock %}
 {% block content %}
-    <ul>
-        <li>{{ disease.name }}</li>
-    </ul>
-    <a class="ui button" href="{{ path('cscv_app_disease_edit', {'id': disease.id}) }}">
-        Edit
-    </a>
+    <div id="diseaseShow" class="ui items" style="text-align: left">
+        <div id="desc" class="item">
+            <a name="desc" class="anchor"></a>
+
+            <div class="content">
+                <a class="header">
+                    疾病简介
+                </a>
+
+                <div class="description">
+                    {{ disease.desc | raw }}
+                </div>
+            </div>
+        </div>
+
+        <div id="etiology" name="etiology" class="item">
+            <a name="etiology" class="anchor"></a>
+
+            <div class="content">
+                <a class="header">
+                    病因
+                </a>
+
+                <div class="description">
+                    {{ disease.etiology | raw }}
+                </div>
+            </div>
+        </div>
+
+        <div id="symptom" class="item">
+            <a name="symptom" class="anchor"></a>
+
+            <div class="content">
+                <a class="header">
+                    症状
+                </a>
+
+                <div class="description">
+                <pre>
+                {{ disease.symptom | raw }}
+                    </pre>
+                </div>
+            </div>
+        </div>
+
+        <div id="prevent" class="item">
+            <a name="prevent" class="anchor"></a>
+
+            <div class="content">
+                <a class="header">
+                    预防
+                </a>
+
+                <div class="description">
+                    {{ disease.prevent | raw }}
+                </div>
+            </div>
+        </div>
+
+        <div id="identify" class="item">
+            <a name="identify" class="anchor"></a>
+
+            <div class="content">
+                <a class="header">
+                    鉴别
+                </a>
+
+                <div class="description">
+                    {{ disease.identify | raw }}
+                </div>
+            </div>
+        </div>
+
+        <div id="complication" class="item">
+            <a name="complication" class="anchor"></a>
+
+            <div class="content">
+                <a class="header">
+                    并发症
+                </a>
+
+                <div class="description">
+                    {{ disease.complication |raw }}
+                </div>
+            </div>
+        </div>
+
+        <div id="therapies" class="item">
+            <a name="therapies" class="anchor"></a>
+
+            <div class="content">
+                <a class="header">
+                    治疗
+                </a>
+
+                <div class="description">
+                    {{ disease.therapies | raw }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {# 导航菜单 #}
+    <div id="diseaseNav" class="ui vertical menu" style="text-align: left">
+        <a class="header item">
+            {{ disease.name }}
+        </a>
+        <a href="#desc" class="active teal item">
+            疾病简介
+        </a>
+        <a href="#etiology" class="item">
+            病因
+        </a>
+        <a href="#symptom" class="item">
+            典型症状
+        </a>
+        <a href="#prevent" class="item">
+            预防
+        </a>
+        <a href="#identify" class="item">
+            鉴别
+        </a>
+        <a href="#complication" class="item">
+            并发症
+        </a>
+        <a href="#therapies" class="item">
+            治疗方法
+        </a>
+
+        <div class="item">
+            <a class="ui red button" href="{{ path('cscv_app_disease_edit', {'id': disease.id}) }}">
+                编辑
+            </a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {% set script_action='disease/show' %}
+    {{ parent() }}
 {% endblock %}
