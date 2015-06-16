@@ -160,8 +160,7 @@ define(function (require, exports, module) {
                     var imageName = imageArray.pop();
                     imageFullPath = 'http://' + window.location.host + '/' + baseUrl + "/" + imageName;
                     this.get("newForm").find("input#path").attr('value', imageName);
-                    // 初始化checkbox
-                    card.find(".ui.checkbox").checkbox();
+
                 } else {
                     //编辑图像标定过程
                     var image = imageArray.pop();
@@ -184,7 +183,8 @@ define(function (require, exports, module) {
                     this.get("editForm").find("input#image_id").attr('value', image.id);
                 }
                 //-------------更新card------------------
-
+                // 初始化checkbox
+                card.find(".ui.checkbox").checkbox();
                 // 更新预览图
                 card.find('#preview').attr('src', imageFullPath);
 
