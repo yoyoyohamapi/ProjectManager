@@ -180,7 +180,7 @@ define(function (require, exports, module) {
                         //否则部位选中
                         $("#locationList").find("[data-value='" + image.location + "']").click();
                     }
-                    imageFullPath = 'http://' + this.get("imageServer") + '/' + image.id;
+                    imageFullPath = 'http://' + this.get("imageServer") + '/' + image.file;
                     this.get("editForm").find("input#image_id").attr('value', image.id);
                 }
                 //-------------更新card------------------
@@ -315,6 +315,7 @@ define(function (require, exports, module) {
             $.each(obj, function (key, value) {
                 var image = {};
                 image.id = key;
+                image.file = value['imageFiles'][0]['$id']['$id'];
                 if (value.hasOwnProperty('disease'))
                     image.disease = value['disease']['$id'];
                 if (value.hasOwnProperty('location'))
