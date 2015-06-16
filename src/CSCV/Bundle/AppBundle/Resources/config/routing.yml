@@ -7,11 +7,29 @@ cscv_app_image_index:
     path:    /image
     defaults: { _controller: CSCVAppBundle:Image:index }
 
+# 新建图像
+cscv_app_image_new:
+    path: /image/new
+    defaults: { _controller: CSCVAppBundle:Image:new}
+    methods: [POST]
+
 # 图像上传
 cscv_app_image_upload:
     path:   /image/upload
     defaults: { _controller: CSCVAppBundle:Image:upload }
     methods: [POST]
+
+# 未完成图像获取
+cscv_app_image_brokens:
+    path: /image/brokens
+    defaults: { _controller: CSCVAppBundle:Image:getBrokenImgs }
+    methods: [GET]
+
+# 图像信息更新
+cscv_app_image_update:
+    path: /image/update
+    defaults: { _controller: CSCVAppBundle:Image:update }
+    methods: [PUT]
 
 cscv_app_image_file:
     path:   /image/file

@@ -16,28 +16,34 @@ define(function (require, exports, module) {
     var Calibrate = Widget.extend({
         element: '#calibrate',
         attrs: {
+            //当前状态标识：是否为新建，反之为编辑
+            isInNewing: true,
             // 存储图像数组
             imageArray: [],
             arraySize: 0,
             baseUrl: 'storage/images/tmp',
             showSelectDialog: $("#showSelectDialog"),
             fileupload: $("#fileupload"),
+            fileload: $("#fileload"),
+            imageServer: '192.168.1.137:8081',
             progress: $("#progress"),
             calibrateProgress: $("#calibrateProgress"),
             card: $("#card"),
-            form: $("form"),
+            newForm: $("#newFormContainer").find("form"),
+            editForm: $("#editFormContainer").find("form"),
             previewMaxWidth: 220,
             previewHeight: 220,
             previewCrop: true,
             files: [],
-            currentFile: undefined,
+            currentFile: undefined
         },
         events: {
-            'click #submit': 'doSubmit',
+            'click #submit': 'doSave',
             'click #showSelectDialog': 'showSelectDialog',
             'click #diseaseList>.item>button': 'setDisease',
             'click #locationList>.item>button ': 'setLocation',
-            'click #croppedHolder': 'setCropped'
+            'click #croppedHolder': 'setCropped',
+            'click #fileload': 'loadImages'
         },
         setup: function () {
             // 初始化文件上传组件
@@ -70,8 +76,8 @@ define(function (require, exports, module) {
                 acceptFileTypes: /(\.|\/)(jpe?g)$/i,
                 autoUpload: true,
                 start: function (e) {
-                    // 隐藏上传框，显示进度条
-                    this_el.get('showSelectDialog').transition({
+                    // 隐藏操作框，显示进度条
+                    $('#actions').transition({
                             animation: 'fade',
                             duration: '0.5s',
                             onComplete: function () {
@@ -107,6 +113,7 @@ define(function (require, exports, module) {
                     animation: 'scale',
                     duration: '0.5s',
                     onComplete: function () {
+                        // 完成后显示标定卡
                         this_el.get('card').transition({
                             animation: 'scale',
                             duration: '1s'
@@ -121,7 +128,7 @@ define(function (require, exports, module) {
             var diseaseList = this.$("#diseaseList");
             var locationList = this.$("#locationList");
             // 初始化疾病
-            this.$('#image_disease option').each(function () {
+            this.get("newForm").find('#image_disease option').each(function () {
                 diseaseList.append("<div class='item'><button class='ui red mini button' data-value='" +
                 $(this).val() + "'>"
                 + $(this).text()
@@ -130,7 +137,7 @@ define(function (require, exports, module) {
             // 默认选中第一个疾病
             this.$("#diseaseList>.item:first").find('button').click();
             // 初始化部位
-            this.$('#image_location option').each(function () {
+            this.get("newForm").find('#image_location option').each(function () {
                 locationList.append("<div class='item'><button class='ui teal mini button' data-value='" +
                 $(this).val() + "'>"
                 + $(this).text()
@@ -144,29 +151,51 @@ define(function (require, exports, module) {
         refreshCard: function () {
             var this_el = this;
             var baseUrl = this.get('baseUrl');
-            var continueUpload = this.get('showSelectDialog');
             var imageArray = this.get('imageArray');
-            var cardSrcContent = this.get('cardSrcContent');
-            var formSrcContent = this.get('formSrcContent');
             var card = this.get('card');
-            var form = this.get('form');
             if (imageArray.length) {
-                var imageName = imageArray.pop();
-                var imageFullPath = 'http://' + window.location.host + '/' + baseUrl + "/" + imageName;
-                // 初始化checkbox
-                card.find(".ui.checkbox").checkbox();
+                var imageFullPath = '';
+                // 新建图像标定过程
+                if (this.get('isInNewing')) {
+                    var imageName = imageArray.pop();
+                    imageFullPath = 'http://' + window.location.host + '/' + baseUrl + "/" + imageName;
+                    this.get("newForm").find("input#path").attr('value', imageName);
+                    // 初始化checkbox
+                    card.find(".ui.checkbox").checkbox();
+                } else {
+                    //编辑图像标定过程
+                    var image = imageArray.pop();
+                    // 显示缺失标记
+                    if (!image.hasOwnProperty('disease')) {
+                        //如果疾病缺失,提示缺失
+                        card.find('#diseaseMisLabel').show();
+                    } else {
+                        // 否则疾病选中
+                        $("#diseaseList").find("[data-value='" + image.disease + "']").click();
+                    }
+                    if (!image.hasOwnProperty('location')) {
+                        //如果部位缺失,提示缺失
+                        card.find("#locationMisLabel").show();
+                    } else {
+                        //否则部位选中
+                        $("#locationList").find("[data-value='" + image.location + "']").click();
+                    }
+                    imageFullPath = 'http://' + this.get("imageServer") + '/' + image.id;
+                    this.get("editForm").find("input#image_id").attr('value', image.id);
+                }
+                //-------------更新card------------------
+
                 // 更新预览图
                 card.find('#preview').attr('src', imageFullPath);
-                // 更新hidden input
-                form.find("input#path").attr('value', imageName);
+
             } else {
-                // 标定结束,显示继续上传
+                // 标定结束,显示操作框
                 card.transition({
                     animation: 'scale',
                     duration: '0.5s',
                     onComplete: function () {
                         this_el.initFileUpload();
-                        continueUpload.transition({
+                        $("#actions").transition({
                             animation: 'scale',
                             duration: '0.5s'
                         });
@@ -176,46 +205,59 @@ define(function (require, exports, module) {
         },
         // 设置是否剪裁
         setCropped: function (e) {
+            var isInNewing = this.get('isInNewing');
+            var form = isInNewing == true ?
+                this.get('newForm') : this.get('editForm');
             // 切换标签文字
             var tagTxt = this.$("#croppedTag").text() == '已剪裁' ? '未剪裁' : '已剪裁';
             this.$("#croppedTag").text(tagTxt);
-            this.$("#image_cropped").click();
+            form.find("#image_cropped").click();
         },
         // 设置疾病
         setDisease: function (e) {
+            var isInNewing = this.get('isInNewing');
+            var form = isInNewing == true ?
+                this.get('newForm') : this.get('editForm');
             var disease = $(e.target).attr('data-value');
             var diseaseName = $(e.target).text();
-            this.$('#image_disease').val(disease);
+            form.find('#image_disease').val(disease);
             // 设置标签
             this.$('#diseaseTag').text(diseaseName);
         },
         // 设置部位
         setLocation: function (e) {
+            var isInNewing = this.get('isInNewing');
+            var form = isInNewing == true ?
+                this.get('newForm') : this.get('editForm');
             var location = $(e.target).attr('data-value');
             var locationName = $(e.target).text();
             // 设置表单项
-            this.$('#image_location').val(location);
+            form.find('#image_location').val(location);
             this.$('#locationTag').text(locationName);
         },
-        // 提交表单
-        doSubmit: function (e) {
+        // 存储图像
+        doSave: function (e) {
             var submitBtn = $(e.target);
             var this_el = this;
-            var form = this.get('form');
+            // 根据当前状态决定表单操作目的
+            var isInNewing = this.get('isInNewing');
+            var form = isInNewing == true ?
+                this.get('newForm') : this.get('editForm');
+            var method = isInNewing == true ?
+                'POST' : 'PUT';
             var values = {};
-            // 设置按钮不可按
+            // 设置按钮不可按，避免连续点击12
             submitBtn.attr('disabled', true);
             // 序列化表单参数
             $.each(form.serializeArray(), function (i, field) {
                 values[field.name] = field.value;
             });
             $.ajax({
-                type: form.attr('method'),
+                type: method,
                 url: form.attr('action'),
                 data: values,
                 dataType: 'json',
                 success: function (data) {
-
                     // 成功标定后，进行下一张图像标定,并更新进度
                     this_el.refreshCard();
                     var curImageIndex = this_el.get('arraySize')
@@ -225,14 +267,62 @@ define(function (require, exports, module) {
                     this_el.get('calibrateProgress').progress({
                         percent: ratio
                     });
-
                     submitBtn.attr('disabled', false);
                 }
             });
         },
         // 显示文件上传框
         showSelectDialog: function () {
+            //当前模式为新建
+            this.set('isInNewing', true);
             this.get('fileupload').click();
+        },
+        // 读取已有文件，对信息不完整者进行标定
+        loadImages: function (e) {
+            //当前状态改为编辑
+            this.set('isInNewing', false);
+            var btn = $(e.target);
+            var this_el = this;
+            $.ajax({
+                url: btn.attr('data-url'),
+                type: 'get',
+                dataType: 'json',
+                statusCode: {
+                    200: function (data) {
+                        // 刷新图像数组
+                        this_el.setImgObj2ImgArray(data.data);
+                        // 隐藏操作框，显示card
+                        $('#actions').transition({
+                                animation: 'fade',
+                                duration: '0.5s',
+                                onComplete: function () {
+                                    // 完成后显示标定卡
+                                    this_el.get('card').transition({
+                                        animation: 'scale',
+                                        duration: '1s'
+                                    });
+                                }
+                            }
+                        );
+                        this_el.refreshCard();
+                    }
+                }
+            });
+        },
+        //将图像Obj数组转换为一般数组
+        setImgObj2ImgArray: function (obj) {
+            var imageArray = [];
+            $.each(obj, function (key, value) {
+                var image = {};
+                image.id = key;
+                if (value.hasOwnProperty('disease'))
+                    image.disease = value['disease']['$id'];
+                if (value.hasOwnProperty('location'))
+                    image.location = value['location'];
+                imageArray.push(image);
+            });
+            this.set('imageArray', imageArray);
+            this.set('arraySize', imageArray.length);
         }
     });
 

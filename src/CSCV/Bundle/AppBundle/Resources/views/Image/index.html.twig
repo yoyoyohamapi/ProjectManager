@@ -2,14 +2,16 @@
 {% block title %}图像标定{% endblock %}
 {% block content %}
     <div id="calibrate">
-        <button id="showSelectDialog" class="ui button massive pink">
-            <i class="icon camera retro"></i>
-            上传文件标定
-        </button>
-        <button id="" class="ui button massive pink">
-            <i class="icon camera retro"></i>
-            已有文件标定
-        </button>
+        <div id="actions">
+            <button id="showSelectDialog" class="ui button massive pink">
+                <i class="icon camera retro"></i>
+                上传文件标定
+            </button>
+            <button id="fileload" data-url="{{ path('cscv_app_image_brokens') }}" class="ui massive green button">
+                <i class="icon file"></i>
+                已有文件标定
+            </button>
+        </div>
         <div id="progress" class="ui large progress" style="margin:0 0 0 0;display: none">
             <div class="bar">
                 <div class="progress"></div>
@@ -29,13 +31,17 @@
                 </div>
                 <div class="ui divider"></div>
                 {# 疾病选择 #}
-                <h2 class="header">病种选择</h2>
+                <h2 class="header">
+                    <a id="diseaseMisLabel" class="ui right ribbon black label" style="display: none">缺失</a>
+                    病种选择</h2>
 
                 <div class="ui horizontal list buttonList" id="diseaseList">
                 </div>
                 <div class="ui divider"></div>
                 {# 部位选择 #}
-                <h2 class="header">部位选择</h2>
+                <h2 class="header">
+                    <a id="locationMisLabel" class="ui right ribbon black label" style="display: none">缺失</a>
+                    部位选择</h2>
 
                 <div class="ui horizontal list buttonList" id="locationList">
                 </div>
@@ -58,10 +64,20 @@
                data-url="{{ path('cscv_app_image_upload') }}" multiple>
 
         <div id="formContainer" style="display: none">
-            {{ form_start(form) }}
-            {{ form_widget(form) }}
-            <input type="hidden" id="path" name="path">
-            {{ form_end(form) }}
+            <div id="newFormContainer">
+                {# 新建图像form #}
+                {{ form_start(newForm) }}
+                {{ form_widget(newForm) }}
+                <input type="hidden" id="path" name="path">
+                {{ form_end(newForm) }}
+            </div>
+            <div id="editFormContainer">
+                {# 编辑图像form#}
+                {{ form_start(editForm) }}
+                {{ form_widget(editForm) }}
+                <input type="hidden" id="image_id" name="image_id">
+                {{ form_end(editForm) }}
+            </div>
         </div>
     </div>
 {% endblock %}

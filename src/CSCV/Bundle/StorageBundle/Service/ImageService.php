@@ -116,12 +116,17 @@ class ImageService extends BaseService
 
 
     /**
-     * 以rest方式进行的图像标定
-     * @param $content
+     * 获得信息不完整的图像
      */
-    public function restUpload($content)
+    public function getBrokenImgs()
     {
-
+        return
+            $this->builder
+                ->hydrate(false)
+                ->addOr($this->builder->expr()->field(Image::DISEASE_KEY)->exists(false))
+                ->addOr($this->builder->expr()->field(Image::LOCATION_KEY)->exists(false))
+                ->getQuery()
+                ->execute();
     }
 
 

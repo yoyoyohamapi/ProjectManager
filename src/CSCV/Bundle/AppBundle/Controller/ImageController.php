@@ -3,6 +3,7 @@
 namespace CSCV\Bundle\AppBundle\Controller;
 
 
+use CSCV\Bundle\AppBundle\Utils\JsonMsgUtils;
 use CSCV\Bundle\StorageBundle\Document\Author;
 use CSCV\Bundle\StorageBundle\Document\Book;
 use CSCV\Bundle\StorageBundle\Document\Image;
@@ -10,6 +11,7 @@ use CSCV\Bundle\StorageBundle\Document\ImageFile;
 use CSCV\Bundle\StorageBundle\Document\State;
 use CSCV\Bundle\StorageBundle\Form\Type\ImageType;
 use CSCV\Bundle\StorageBundle\Service\ImageService;
+use FOS\RestBundle\Util\Codes;
 use Gedmo\Uploadable\FakeFileInfo;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,23 +23,41 @@ class ImageController extends BaseController
     /**
      * 图像标定主页
      */
-    public function indexAction(Request $request)
+    public function indexAction()
     {
-        $disService = $this->get('disease_service');
+        // 产生首页需要的两个表单
         $image = new Image();
-        $form = $this->createForm(
-            new ImageType(),
-            $image
+        $newForm = $this->generateForm(
+            $image,
+            $this->generateUrl('cscv_app_image_new'),
+            'POST'
         );
-        $form->add(
-            Image::DISEASE_KEY,
-            'document',
+
+        $editForm = $this->generateForm(
+            $image,
+            $this->generateUrl('cscv_app_image_update'),
+            'PUT'
+        );
+        return $this->render(
+            '@CSCVApp/Image/index.html.twig',
             array(
-                'class' => 'CSCVStorageBundle:Disease',
-                'property' => 'name',
-                'choices' => $disService->findAllBase(),
-                'multiple' => false,
+                'newForm' => $newForm->createView(),
+                'editForm' => $editForm->createView()
             )
+        );
+    }
+
+    /**
+     * 新建图像
+     * @param $request 请求响应
+     */
+    public function newAction(Request $request)
+    {
+        $image = new Image();
+        $form = $this->generateForm(
+            $image,
+            $this->generateUrl('cscv_app_image_new'),
+            'POST'
         );
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -53,19 +73,20 @@ class ImageController extends BaseController
             $response = array(
                 'success' => true
             );
-            return $this->createJsonResponse(
-                $response,
-                JsonResponse::HTTP_OK,
-                ''
-            );
+            $jsonData = $image;
+            $statusCode = Codes::HTTP_OK;
+            $msg = JsonMsgUtils::ERROR_MSG;
+
         } else {
+            $jsonData = JsonMsgUtils::FORM_INVALID_CB;
+            $statusCode = Codes::HTTP_BAD_REQUEST;
+            $msg = JsonMsgUtils::ERROR_MSG;
         }
 
-        return $this->render(
-            '@CSCVApp/Image/index.html.twig',
-            array(
-                'form' => $form->createView()
-            )
+        return $this->createJsonResponse(
+            $jsonData,
+            $statusCode,
+            $msg
         );
     }
 
@@ -82,6 +103,93 @@ class ImageController extends BaseController
             JsonResponse::HTTP_OK,
             ''
         );
+    }
+
+
+    /**
+     * 获得信息不完整的图像
+     * @return JsonResponse
+     */
+    public function getBrokenImgsAction()
+    {
+        $imageService = $this->get('image_service');
+        $images = $imageService->getBrokenImgs();
+        if (empty($images)) {
+            $jsonData = "";
+            $statusCode = Codes::HTTP_NO_CONTENT;
+            $msg = JsonMsgUtils::ERROR_MSG;
+        } else {
+            $jsonData = $images->toArray();
+            $statusCode = Codes::HTTP_OK;
+            $msg = JsonMsgUtils::SUCCESS_MSG;
+        }
+
+        return $this->createJsonResponse($jsonData, $statusCode, $msg);
+    }
+
+    /**
+     * 更新图像方法
+     * @param $request 请求
+     */
+    public function updateAction(Request $request)
+    {
+        $imageService = $this->get('image_service');
+        $imageId = $request->get('image_id');
+        $request->request->remove('image_id');
+        // 根据Id获得待更新图像
+        $image = $imageService->find($imageId);
+        $form = $this->generateForm(
+            $image,
+            $this->generateUrl('cscv_app_image_update'),
+            'PUT'
+        );
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            // 刷新Token
+            $imageService->save($image);
+            $jsonData = "refresh token";
+            $msg = JsonMsgUtils::SUCCESS_MSG;
+            $statusCode = Codes::HTTP_OK;
+        } else {
+            $jsonData = JsonMsgUtils::FORM_INVALID_CB;
+            $msg = JsonMsgUtils::ERROR_MSG;
+            $statusCode = Codes::HTTP_BAD_REQUEST;
+        }
+
+        return $this->createJsonResponse($jsonData, $statusCode, $msg);
+
+    }
+
+    /**
+     * 产生表单
+     * @param $image 表单中图像对象
+     * @param $action 表单action
+     * @param $method 表单method
+     * @return \Symfony\Component\Form\Form
+     */
+    private function generateForm($image, $action, $method)
+    {
+        $disService = $this->get("disease_service");
+        $form = $this->createForm(
+            new ImageType(),
+            $image,
+            array(
+                'action' => $action,
+                'method' => $method
+            )
+        );
+        $form->add(
+            Image::DISEASE_KEY,
+            'document',
+            array(
+                'class' => 'CSCVStorageBundle:Disease',
+                'property' => 'name',
+                'choices' => $disService->findAllBase(),
+                'multiple' => false,
+            )
+        );
+
+        return $form;
     }
 
     public function fileAction()
