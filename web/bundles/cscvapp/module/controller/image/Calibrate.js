@@ -25,7 +25,7 @@ define(function (require, exports, module) {
             showSelectDialog: $("#showSelectDialog"),
             fileupload: $("#fileupload"),
             fileload: $("#fileload"),
-            imageServer: '192.168.1.137:8081',
+            imageServer: '192.168.1.137:8081/images',
             progress: $("#progress"),
             calibrateProgress: $("#calibrateProgress"),
             card: $("#card"),
