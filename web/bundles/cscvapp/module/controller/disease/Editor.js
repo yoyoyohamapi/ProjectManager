@@ -8,10 +8,9 @@
 define(function (require, exports, module) {
     require('jquery-easing');
     require('fullPage');
-    //require('tinymce');
     require("semantic-dimmer");
     require("semantic-modal");
-    require("wangEditor");
+    require("ckeditor");
     var Widget = require('arale-widget');
     var Editor = Widget.extend({
         element: '#editor',
@@ -59,18 +58,9 @@ define(function (require, exports, module) {
             // 获得当前屏幕高度
             var height = window.screen.height;
             $("textarea").each(function () {
-                $(this).wangEditor();
-                //tinymce.init({
-                //    selector: "#" + $(this).attr('id'),
-                //    height: height * 0.4,
-                //    menubar: false,
-                //    plugins: [
-                //        "advlist autolink lists link image charmap print preview anchor",
-                //        "searchreplace visualblocks code fullscreen",
-                //        "insertdatetime media table contextmenu paste"
-                //    ],
-                //    toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | preview media link image"
-                //});
+                CKEDITOR.replace($(this).attr('name'), {
+                    height: height * 0.4
+                });
             });
         }
     });

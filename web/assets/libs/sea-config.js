@@ -33,7 +33,7 @@ seajs.config({
         "arale-switchable": "arale-switchable/1.1.1/switchable.js",
         "fullPage": "fullPage/jquery.fullPage.js",
         "tinymce": "tinymce/tinymce.min.js",
-        "wangEditor": "wangEditor/dist/js/wangEditor-1.3.0.min.js",
+        "ckeditor": "ckeditor/ckeditor.js",
         'map': [
             [/^(.*\.(?:css|js))(.*)$/i, '$1?20140801']
         ]
