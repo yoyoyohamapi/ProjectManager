@@ -11,7 +11,7 @@
                     <i class="remove icon"></i>
                 </a>
                 <a class="image" href=" {{ path('cscv_app_disease_show', {'id': disease.id }) }}">
-                    <img src="{{ asset('bundles/cscvapp/images/1.0/account/bkg.jpg') }}"/>
+                    <img src="{{ asset_if('images/disCover/'~disease.name~'.jpg','images/disCover/noPic.jpg') }}"/>
                 </a>
 
                 <div class="content">

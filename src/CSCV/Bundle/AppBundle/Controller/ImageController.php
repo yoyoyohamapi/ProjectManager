@@ -12,7 +12,6 @@ use CSCV\Bundle\StorageBundle\Document\State;
 use CSCV\Bundle\StorageBundle\Form\Type\ImageType;
 use CSCV\Bundle\StorageBundle\Service\ImageService;
 use FOS\RestBundle\Util\Codes;
-use Gedmo\Uploadable\FakeFileInfo;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

@@ -59,7 +59,7 @@ define(function (require, exports, module) {
             var height = window.screen.height;
             $("textarea").each(function () {
                 CKEDITOR.replace($(this).attr('name'), {
-                    height: height * 0.4
+                    height: height * 0.35
                 });
             });
         }

@@ -1,7 +1,6 @@
 services:
-    cscv_app_bundle.product.form.type:
-        class: CSCV\Bundle\AppBundle\Form\Type\ProductType
-        arguments: [@service_container]
-        scope: request
+    cscv.twig.asset_if_extension:
+        class: CSCV\Bundle\AppBundle\Services\Extension\CustomTwigExtension
+        arguments: ['@service_container']
         tags:
-            - { name: form.type, alias: product }
+            - { name: twig.extension }
