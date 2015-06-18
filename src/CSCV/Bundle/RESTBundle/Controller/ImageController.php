@@ -95,7 +95,7 @@ class ImageController extends BaseController
             array(
                 'class' => 'CSCVStorageBundle:Disease',
                 'property' => 'name',
-                'choices' => $disService->findAllBase(),
+                'choices' => $disService->findAll(),
                 'multiple' => false,
             )
         );

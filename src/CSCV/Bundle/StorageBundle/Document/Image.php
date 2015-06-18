@@ -31,7 +31,7 @@ class Image extends BaseDocument
     const IMAGE_FILES_KEY = 'imageFiles';
 
     /**
-     * @MongoDB\ReferenceOne(targetDocument="Disease",simple=true,cascade="detach")
+     * @MongoDB\ReferenceOne(targetDocument="Disease",simple=true)
      */
     private $disease; // 分类标记
 

@@ -70,9 +70,7 @@ class ImageController extends BaseController
                 ImageService::FILE_INFO_TYPE_KEY => ImageFile::IMAGE_SRC_TYPE
             );
             $imageService->setImgFile($image, $fileInfo);
-            $response = array(
-                'success' => true
-            );
+
             $jsonData = $image;
             $statusCode = Codes::HTTP_OK;
             $msg = JsonMsgUtils::ERROR_MSG;
@@ -184,7 +182,7 @@ class ImageController extends BaseController
             array(
                 'class' => 'CSCVStorageBundle:Disease',
                 'property' => 'name',
-                'choices' => $disService->findAllBase(),
+                'choices' => $disService->findAll(),
                 'multiple' => false,
             )
         );
