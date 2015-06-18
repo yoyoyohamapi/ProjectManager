@@ -9380,13 +9380,9 @@
             }
         }
     })();
-    /*
-     Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
-     For licensing, see LICENSE.md or http://ckeditor.com/license
-     */
-    CKEDITOR.skin.name = "moono";
+    CKEDITOR.skin.name = "bootstrapck";
     CKEDITOR.skin.ua_editor = "ie,iequirks,ie7,ie8,gecko";
-    CKEDITOR.skin.ua_dialog = "ie,iequirks,ie7,ie8";
+    CKEDITOR.skin.ua_dialog = "ie,iequirks,ie7,ie8,opera";
     CKEDITOR.skin.chameleon = function () {
         var b = function () {
             return function (b, e) {
@@ -17461,8 +17457,492 @@
             CKEDITOR.dialog.add("checkspell", this.path + (CKEDITOR.env.ie && 7 >= CKEDITOR.env.version ? "dialogs/wsc_ie.js" : window.postMessage ? "dialogs/wsc.js" : "dialogs/wsc_ie.js"))
         }
     });
-    CKEDITOR.config.plugins = 'dialogui,dialog,about,a11yhelp,basicstyles,blockquote,clipboard,panel,floatpanel,menu,contextmenu,resize,button,toolbar,elementspath,enterkey,entities,popup,filebrowser,floatingspace,listblock,richcombo,format,horizontalrule,htmlwriter,wysiwygarea,image,indent,indentlist,fakeobjects,link,list,magicline,maximize,pastetext,pastefromword,removeformat,showborders,sourcearea,specialchar,menubutton,scayt,stylescombo,tab,table,tabletools,undo,wsc';
-    CKEDITOR.config.skin = 'moono';
+    CKEDITOR.plugins.add("panelbutton", {
+        requires: "button", onLoad: function () {
+            function e(c) {
+                var a = this._;
+                a.state != CKEDITOR.TRISTATE_DISABLED && (this.createPanel(c), a.on ? a.panel.hide() : a.panel.showBlock(this._.id, this.document.getById(this._.id), 4))
+            }
+
+            CKEDITOR.ui.panelButton = CKEDITOR.tools.createClass({
+                base: CKEDITOR.ui.button, $: function (c) {
+                    var a = c.panel || {};
+                    delete c.panel;
+                    this.base(c);
+                    this.document = a.parent && a.parent.getDocument() || CKEDITOR.document;
+                    a.block = {attributes: a.attributes};
+                    this.hasArrow = a.toolbarRelated = !0;
+                    this.click = e;
+                    this._ = {panelDefinition: a}
+                }, statics: {
+                    handler: {
+                        create: function (c) {
+                            return new CKEDITOR.ui.panelButton(c)
+                        }
+                    }
+                }, proto: {
+                    createPanel: function (c) {
+                        var a = this._;
+                        if (!a.panel) {
+                            var f = this._.panelDefinition, e = this._.panelDefinition.block, g = f.parent || CKEDITOR.document.getBody(), d = this._.panel = new CKEDITOR.ui.floatPanel(c, g, f), f = d.addBlock(a.id, e), b = this;
+                            d.onShow = function () {
+                                b.className && this.element.addClass(b.className + "_panel");
+                                b.setState(CKEDITOR.TRISTATE_ON);
+                                a.on = 1;
+                                b.editorFocus && c.focus();
+                                if (b.onOpen)b.onOpen()
+                            };
+                            d.onHide = function (d) {
+                                b.className && this.element.getFirst().removeClass(b.className + "_panel");
+                                b.setState(b.modes && b.modes[c.mode] ? CKEDITOR.TRISTATE_OFF : CKEDITOR.TRISTATE_DISABLED);
+                                a.on = 0;
+                                if (!d && b.onClose)b.onClose()
+                            };
+                            d.onEscape = function () {
+                                d.hide(1);
+                                b.document.getById(a.id).focus()
+                            };
+                            if (this.onBlock)this.onBlock(d, f);
+                            f.onHide = function () {
+                                a.on = 0;
+                                b.setState(CKEDITOR.TRISTATE_OFF)
+                            }
+                        }
+                    }
+                }
+            })
+        }, beforeInit: function (e) {
+            e.ui.addHandler(CKEDITOR.UI_PANELBUTTON, CKEDITOR.ui.panelButton.handler)
+        }
+    });
+    CKEDITOR.UI_PANELBUTTON = "panelbutton";
+    CKEDITOR.plugins.add("colorbutton", {
+        requires: "panelbutton,floatpanel", init: function (c) {
+            function o(m, g, e, h) {
+                var i = new CKEDITOR.style(j["colorButton_" + g + "Style"]), k = CKEDITOR.tools.getNextId() + "_colorBox";
+                c.ui.add(m, CKEDITOR.UI_PANELBUTTON, {
+                    label: e,
+                    title: e,
+                    modes: {wysiwyg: 1},
+                    editorFocus: 0,
+                    toolbar: "colors," + h,
+                    allowedContent: i,
+                    requiredContent: i,
+                    panel: {
+                        css: CKEDITOR.skin.getPath("editor"),
+                        attributes: {role: "listbox", "aria-label": f.panelTitle}
+                    },
+                    onBlock: function (a, b) {
+                        b.autoSize = !0;
+                        b.element.addClass("cke_colorblock");
+                        b.element.setHtml(q(a, g, k));
+                        b.element.getDocument().getBody().setStyle("overflow", "hidden");
+                        CKEDITOR.ui.fire("ready", this);
+                        var d = b.keys, e = "rtl" == c.lang.dir;
+                        d[e ? 37 : 39] = "next";
+                        d[40] = "next";
+                        d[9] = "next";
+                        d[e ? 39 : 37] = "prev";
+                        d[38] = "prev";
+                        d[CKEDITOR.SHIFT + 9] = "prev";
+                        d[32] = "click"
+                    },
+                    refresh: function () {
+                        c.activeFilter.check(i) || this.setState(CKEDITOR.TRISTATE_DISABLED)
+                    },
+                    onOpen: function () {
+                        var a = c.getSelection(), a = a && a.getStartElement(), a = c.elementPath(a), b;
+                        if (a) {
+                            a = a.block || a.blockLimit || c.document.getBody();
+                            do b =
+                                a && a.getComputedStyle("back" == g ? "background-color" : "color") || "transparent"; while ("back" == g && "transparent" == b && a && (a = a.getParent()));
+                            if (!b || "transparent" == b)b = "#ffffff";
+                            this._.panel._.iframe.getFrameDocument().getById(k).setStyle("background-color", b);
+                            return b
+                        }
+                    }
+                })
+            }
+
+            function q(m, g, e) {
+                var h = [], i = j.colorButton_colors.split(","), k = c.plugins.colordialog && !1 !== j.colorButton_enableMore, a = i.length + (k ? 2 : 1), b = CKEDITOR.tools.addFunction(function (a, b) {
+                    function d(a) {
+                        this.removeListener("ok", d);
+                        this.removeListener("cancel",
+                            d);
+                        "ok" == a.name && e(this.getContentElement("picker", "selectedColor").getValue(), b)
+                    }
+
+                    var e = arguments.callee;
+                    if ("?" == a)c.openDialog("colordialog", function () {
+                        this.on("ok", d);
+                        this.on("cancel", d)
+                    }); else {
+                        c.focus();
+                        m.hide();
+                        c.fire("saveSnapshot");
+                        c.removeStyle(new CKEDITOR.style(j["colorButton_" + b + "Style"], {color: "inherit"}));
+                        if (a) {
+                            var f = j["colorButton_" + b + "Style"];
+                            f.childRule = "back" == b ? function (a) {
+                                return p(a)
+                            } : function (a) {
+                                return !(a.is("a") || a.getElementsByTag("a").count()) || p(a)
+                            };
+                            c.applyStyle(new CKEDITOR.style(f,
+                                {color: a}))
+                        }
+                        c.fire("saveSnapshot")
+                    }
+                });
+                h.push('<a class="cke_colorauto" _cke_focus=1 hidefocus=true title="', f.auto, '" onclick="CKEDITOR.tools.callFunction(', b, ",null,'", g, "');return false;\" href=\"javascript:void('", f.auto, '\')" role="option" aria-posinset="1" aria-setsize="', a, '"><table role="presentation" cellspacing=0 cellpadding=0 width="100%"><tr><td><span class="cke_colorbox" id="', e, '"></span></td><td colspan=7 align=center>', f.auto, '</td></tr></table></a><table role="presentation" cellspacing=0 cellpadding=0 width="100%">');
+                for (e = 0; e < i.length; e++) {
+                    0 === e % 8 && h.push("</tr><tr>");
+                    var d = i[e].split("/"), l = d[0], n = d[1] || l;
+                    d[1] || (l = "#" + l.replace(/^(.)(.)(.)$/, "$1$1$2$2$3$3"));
+                    d = c.lang.colorbutton.colors[n] || n;
+                    h.push('<td><a class="cke_colorbox" _cke_focus=1 hidefocus=true title="', d, '" onclick="CKEDITOR.tools.callFunction(', b, ",'", l, "','", g, "'); return false;\" href=\"javascript:void('", d, '\')" role="option" aria-posinset="', e + 2, '" aria-setsize="', a, '"><span class="cke_colorbox" style="background-color:#', n, '"></span></a></td>')
+                }
+                k &&
+                h.push('</tr><tr><td colspan=8 align=center><a class="cke_colormore" _cke_focus=1 hidefocus=true title="', f.more, '" onclick="CKEDITOR.tools.callFunction(', b, ",'?','", g, "');return false;\" href=\"javascript:void('", f.more, "')\"", ' role="option" aria-posinset="', a, '" aria-setsize="', a, '">', f.more, "</a></td>");
+                h.push("</tr></table>");
+                return h.join("")
+            }
+
+            function p(c) {
+                return "false" == c.getAttribute("contentEditable") || c.getAttribute("data-nostyle")
+            }
+
+            var j = c.config, f = c.lang.colorbutton;
+            CKEDITOR.env.hc || (o("TextColor",
+                "fore", f.textColorTitle, 10), o("BGColor", "back", f.bgColorTitle, 20))
+        }
+    });
+    CKEDITOR.config.colorButton_colors = "000,800000,8B4513,2F4F4F,008080,000080,4B0082,696969,B22222,A52A2A,DAA520,006400,40E0D0,0000CD,800080,808080,F00,FF8C00,FFD700,008000,0FF,00F,EE82EE,A9A9A9,FFA07A,FFA500,FFFF00,00FF00,AFEEEE,ADD8E6,DDA0DD,D3D3D3,FFF0F5,FAEBD7,FFFFE0,F0FFF0,F0FFFF,F0F8FF,E6E6FA,FFF";
+    CKEDITOR.config.colorButton_foreStyle = {
+        element: "span",
+        styles: {color: "#(color)"},
+        overrides: [{element: "font", attributes: {color: null}}]
+    };
+    CKEDITOR.config.colorButton_backStyle = {element: "span", styles: {"background-color": "#(color)"}};
+    (function () {
+        function j(a, b, c, f, m, j, p, r) {
+            for (var s = a.config, n = new CKEDITOR.style(p), i = m.split(";"), m = [], k = {}, d = 0; d < i.length; d++) {
+                var h = i[d];
+                if (h) {
+                    var h = h.split("/"), q = {}, l = i[d] = h[0];
+                    q[c] = m[d] = h[1] || l;
+                    k[l] = new CKEDITOR.style(p, q);
+                    k[l]._.definition.name = l
+                } else i.splice(d--, 1)
+            }
+            a.ui.addRichCombo(b, {
+                label: f.label,
+                title: f.panelTitle,
+                toolbar: "styles," + r,
+                allowedContent: n,
+                requiredContent: n,
+                panel: {
+                    css: [CKEDITOR.skin.getPath("editor")].concat(s.contentsCss),
+                    multiSelect: !1,
+                    attributes: {"aria-label": f.panelTitle}
+                },
+                init: function () {
+                    this.startGroup(f.panelTitle);
+                    for (var a = 0; a < i.length; a++) {
+                        var b = i[a];
+                        this.add(b, k[b].buildPreview(), b)
+                    }
+                },
+                onClick: function (b) {
+                    a.focus();
+                    a.fire("saveSnapshot");
+                    var c = this.getValue(), f = k[b];
+                    if (c && b != c) {
+                        var i = k[c], e = a.getSelection().getRanges()[0];
+                        if (e.collapsed) {
+                            var d = a.elementPath(), g = d.contains(function (a) {
+                                return i.checkElementRemovable(a)
+                            });
+                            if (g) {
+                                var h = e.checkBoundaryOfElement(g, CKEDITOR.START), j = e.checkBoundaryOfElement(g, CKEDITOR.END);
+                                if (h && j) {
+                                    for (h = e.createBookmark(); d = g.getFirst();)d.insertBefore(g);
+                                    g.remove();
+                                    e.moveToBookmark(h)
+                                } else h ? e.moveToPosition(g, CKEDITOR.POSITION_BEFORE_START) : j ? e.moveToPosition(g, CKEDITOR.POSITION_AFTER_END) : (e.splitElement(g), e.moveToPosition(g, CKEDITOR.POSITION_AFTER_END), o(e, d.elements.slice(), g));
+                                a.getSelection().selectRanges([e])
+                            }
+                        } else a.removeStyle(i)
+                    }
+                    a[c == b ? "removeStyle" : "applyStyle"](f);
+                    a.fire("saveSnapshot")
+                },
+                onRender: function () {
+                    a.on("selectionChange", function (b) {
+                        for (var c = this.getValue(), b = b.data.path.elements, d = 0, f; d < b.length; d++) {
+                            f = b[d];
+                            for (var e in k)if (k[e].checkElementMatch(f,
+                                    !0, a)) {
+                                e != c && this.setValue(e);
+                                return
+                            }
+                        }
+                        this.setValue("", j)
+                    }, this)
+                },
+                refresh: function () {
+                    a.activeFilter.check(n) || this.setState(CKEDITOR.TRISTATE_DISABLED)
+                }
+            })
+        }
+
+        function o(a, b, c) {
+            var f = b.pop();
+            if (f) {
+                if (c)return o(a, b, f.equals(c) ? null : c);
+                c = f.clone();
+                a.insertNode(c);
+                a.moveToPosition(c, CKEDITOR.POSITION_AFTER_START);
+                o(a, b)
+            }
+        }
+
+        CKEDITOR.plugins.add("font", {
+            requires: "richcombo", init: function (a) {
+                var b = a.config;
+                j(a, "Font", "family", a.lang.font, b.font_names, b.font_defaultLabel, b.font_style, 30);
+                j(a, "FontSize", "size",
+                    a.lang.font.fontSize, b.fontSize_sizes, b.fontSize_defaultLabel, b.fontSize_style, 40)
+            }
+        })
+    })();
+    CKEDITOR.config.font_names = "Arial/Arial, Helvetica, sans-serif;Comic Sans MS/Comic Sans MS, cursive;Courier New/Courier New, Courier, monospace;Georgia/Georgia, serif;Lucida Sans Unicode/Lucida Sans Unicode, Lucida Grande, sans-serif;Tahoma/Tahoma, Geneva, sans-serif;Times New Roman/Times New Roman, Times, serif;Trebuchet MS/Trebuchet MS, Helvetica, sans-serif;Verdana/Verdana, Geneva, sans-serif";
+    CKEDITOR.config.font_defaultLabel = "";
+    CKEDITOR.config.font_style = {
+        element: "span",
+        styles: {"font-family": "#(family)"},
+        overrides: [{element: "font", attributes: {face: null}}]
+    };
+    CKEDITOR.config.fontSize_sizes = "8/8px;9/9px;10/10px;11/11px;12/12px;14/14px;16/16px;18/18px;20/20px;22/22px;24/24px;26/26px;28/28px;36/36px;48/48px;72/72px";
+    CKEDITOR.config.fontSize_defaultLabel = "";
+    CKEDITOR.config.fontSize_style = {
+        element: "span",
+        styles: {"font-size": "#(size)"},
+        overrides: [{element: "font", attributes: {size: null}}]
+    };
+    (function () {
+        function f(b, d, a) {
+            if (!b.getCustomData("indent_processed")) {
+                var e = this.editor, j = this.isIndent;
+                if (d) {
+                    e = b.$.className.match(this.classNameRegex);
+                    a = 0;
+                    e && (e = e[1], a = CKEDITOR.tools.indexOf(d, e) + 1);
+                    if (0 > (a += j ? 1 : -1))return;
+                    a = Math.min(a, d.length);
+                    a = Math.max(a, 0);
+                    b.$.className = CKEDITOR.tools.ltrim(b.$.className.replace(this.classNameRegex, ""));
+                    0 < a && b.addClass(d[a - 1])
+                } else {
+                    var d = k(b, a), a = parseInt(b.getStyle(d), 10), g = e.config.indentOffset || 40;
+                    isNaN(a) && (a = 0);
+                    a += (j ? 1 : -1) * g;
+                    if (0 > a)return;
+                    a = Math.max(a,
+                        0);
+                    a = Math.ceil(a / g) * g;
+                    b.setStyle(d, a ? a + (e.config.indentUnit || "px") : "");
+                    "" === b.getAttribute("style") && b.removeAttribute("style")
+                }
+                CKEDITOR.dom.element.setMarker(this.database, b, "indent_processed", 1)
+            }
+        }
+
+        function k(b, d) {
+            return "ltr" == (d || b.getComputedStyle("direction")) ? "margin-left" : "margin-right"
+        }
+
+        var h = CKEDITOR.dtd.$listItem, m = CKEDITOR.dtd.$list, i = CKEDITOR.TRISTATE_DISABLED, l = CKEDITOR.TRISTATE_OFF;
+        CKEDITOR.plugins.add("indentblock", {
+            requires: "indent", init: function (b) {
+                function d() {
+                    a.specificDefinition.apply(this,
+                        arguments);
+                    this.allowedContent = {
+                        "div h1 h2 h3 h4 h5 h6 ol p pre ul": {
+                            propertiesOnly: !0,
+                            styles: !e ? "margin-left,margin-right" : null,
+                            classes: e || null
+                        }
+                    };
+                    this.enterBr && (this.allowedContent.div = !0);
+                    this.requiredContent = (this.enterBr ? "div" : "p") + (e ? "(" + e.join(",") + ")" : "{margin-left}");
+                    this.jobs = {
+                        20: {
+                            refresh: function (a, b) {
+                                var c = b.block || b.blockLimit;
+                                c.is(h) || (c = c.getAscendant(h) || c);
+                                c.is(h) && (c = c.getParent());
+                                if (!this.enterBr && !this.getContext(b))return i;
+                                if (e) {
+                                    var d;
+                                    d = e;
+                                    var c = c.$.className.match(this.classNameRegex),
+                                        f = this.isIndent;
+                                    d = c ? f ? c[1] != d.slice(-1) : true : f;
+                                    return d ? l : i
+                                }
+                                return this.isIndent ? l : c ? CKEDITOR[(parseInt(c.getStyle(k(c)), 10) || 0) <= 0 ? "TRISTATE_DISABLED" : "TRISTATE_OFF"] : i
+                            }, exec: function (a) {
+                                var b = a.getSelection(), b = b && b.getRanges()[0], c;
+                                if (c = a.elementPath().contains(m))f.call(this, c, e); else {
+                                    b = b.createIterator();
+                                    a = a.config.enterMode;
+                                    b.enforceRealBlocks = true;
+                                    for (b.enlargeBr = a != CKEDITOR.ENTER_BR; c = b.getNextParagraph(a == CKEDITOR.ENTER_P ? "p" : "div");)c.isReadOnly() || f.call(this, c, e)
+                                }
+                                return true
+                            }
+                        }
+                    }
+                }
+
+                var a =
+                    CKEDITOR.plugins.indent, e = b.config.indentClasses;
+                a.registerCommands(b, {
+                    indentblock: new d(b, "indentblock", !0),
+                    outdentblock: new d(b, "outdentblock")
+                });
+                CKEDITOR.tools.extend(d.prototype, a.specificDefinition.prototype, {
+                    context: {
+                        div: 1,
+                        dl: 1,
+                        h1: 1,
+                        h2: 1,
+                        h3: 1,
+                        h4: 1,
+                        h5: 1,
+                        h6: 1,
+                        ul: 1,
+                        ol: 1,
+                        p: 1,
+                        pre: 1,
+                        table: 1
+                    }, classNameRegex: e ? RegExp("(?:^|\\s+)(" + e.join("|") + ")(?=$|\\s)") : null
+                })
+            }
+        })
+    })();
+    (function () {
+        function j(a, h, j, m, k, p, n, q) {
+            for (var m = a.config, l = new CKEDITOR.style(n), c = k.split(";"), k = [], g = {}, d = 0; d < c.length; d++) {
+                var e = c[d];
+                if (e) {
+                    var e = e.split("/"), o = {}, i = c[d] = e[0];
+                    o[j] = k[d] = e[1] || i;
+                    g[i] = new CKEDITOR.style(n, o);
+                    g[i]._.definition.name = i
+                } else c.splice(d--, 1)
+            }
+            a.ui.addRichCombo(h, {
+                label: a.lang.lineheight.title,
+                title: a.lang.lineheight.title,
+                toolbar: "styles," + q,
+                allowedContent: l,
+                requiredContent: l,
+                panel: {
+                    css: [CKEDITOR.skin.getPath("editor")].concat(m.contentsCss),
+                    multiSelect: !1,
+                    attributes: {"aria-label": a.lang.lineheight.title}
+                },
+                init: function () {
+                    this.startGroup(a.lang.lineheight.title);
+                    for (var b = 0; b < c.length; b++) {
+                        var f = c[b];
+                        this.add(f, g[f].buildPreview(), f)
+                    }
+                },
+                onClick: function (b) {
+                    a.focus();
+                    a.fire("saveSnapshot");
+                    var f = g[b];
+                    a[this.getValue() == b ? "removeStyle" : "applyStyle"](f);
+                    a.fire("saveSnapshot")
+                },
+                onRender: function () {
+                    a.on("selectionChange", function (b) {
+                        for (var f = this.getValue(), b = b.data.path.elements, c = 0, d; c < b.length; c++) {
+                            d = b[c];
+                            for (var e in g)if (g[e].checkElementMatch(d, !0, a)) {
+                                e != f && this.setValue(e);
+                                return
+                            }
+                        }
+                        this.setValue("",
+                            p)
+                    }, this)
+                },
+                refresh: function () {
+                    a.activeFilter.check(l) || this.setState(CKEDITOR.TRISTATE_DISABLED)
+                }
+            })
+        }
+
+        CKEDITOR.plugins.add("lineheight", {
+            requires: "richcombo", lang: "ar,de,en,es,fr,ko,pt", init: function (a) {
+                var h = a.config;
+                j(a, "lineheight", "size", a.lang.lineheight.title, h.line_height, a.lang.lineheight.title, h.lineHeight_style, 40)
+            }
+        })
+    })();
+    CKEDITOR.config.line_height = "1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23;24;25;26;27;28;29;30;31;32;33;34;35;36;37;38;39;40;41;42;43;44;45;46;47;48;49;50;51;52;53;54;55;56;57;58;59;60;61;62;63;64;65;66;67;68;69;70;71;72";
+    CKEDITOR.config.lineHeight_style = {
+        element: "span",
+        styles: {"line-height": "#(size)"},
+        overrides: [{element: "line-height", attributes: {size: null}}]
+    };
+    (function () {
+        var h, i = {
+            modes: {wysiwyg: 1, source: 1}, canUndo: !1, readOnly: 1, exec: function (a) {
+                var g, b = a.config, f = b.baseHref ? '<base href="' + b.baseHref + '"/>' : "";
+                if (b.fullPage)g = a.getData().replace(/<head>/, "$&" + f).replace(/[^>]*(?=<\/title>)/, "$& &mdash; " + a.lang.preview.preview); else {
+                    var b = "<body ", d = a.document && a.document.getBody();
+                    d && (d.getAttribute("id") && (b += 'id="' + d.getAttribute("id") + '" '), d.getAttribute("class") && (b += 'class="' + d.getAttribute("class") + '" '));
+                    g = a.config.docType + '<html dir="' + a.config.contentsLangDirection +
+                    '"><head>' + f + "<title>" + a.lang.preview.preview + "</title>" + CKEDITOR.tools.buildStyleHtml(a.config.contentsCss) + "</head>" + (b + ">") + a.getData() + "</body></html>"
+                }
+                f = 640;
+                b = 420;
+                d = 80;
+                try {
+                    var c = window.screen, f = Math.round(0.8 * c.width), b = Math.round(0.7 * c.height), d = Math.round(0.1 * c.width)
+                } catch (i) {
+                }
+                if (!1 === a.fire("contentPreview", a = {dataValue: g}))return !1;
+                var c = "", e;
+                CKEDITOR.env.ie && (window._cke_htmlToLoad = a.dataValue, e = "javascript:void( (function(){document.open();" + ("(" + CKEDITOR.tools.fixDomain + ")();").replace(/\/\/.*?\n/g,
+                    "").replace(/parent\./g, "window.opener.") + "document.write( window.opener._cke_htmlToLoad );document.close();window.opener._cke_htmlToLoad = null;})() )", c = "");
+                CKEDITOR.env.gecko && (window._cke_htmlToLoad = a.dataValue, c = CKEDITOR.getUrl(h + "preview.html"));
+                c = window.open(c, null, "toolbar=yes,location=no,status=yes,menubar=yes,scrollbars=yes,resizable=yes,width=" + f + ",height=" + b + ",left=" + d);
+                CKEDITOR.env.ie && c && (c.location = e);
+                !CKEDITOR.env.ie && !CKEDITOR.env.gecko && (e = c.document, e.open(), e.write(a.dataValue),
+                    e.close());
+                return !0
+            }
+        };
+        CKEDITOR.plugins.add("preview", {
+            init: function (a) {
+                a.elementMode != CKEDITOR.ELEMENT_MODE_INLINE && (h = this.path, a.addCommand("preview", i), a.ui.addButton && a.ui.addButton("Preview", {
+                    label: a.lang.preview.preview,
+                    command: "preview",
+                    toolbar: "document,40"
+                }))
+            }
+        })
+    })();
+    CKEDITOR.config.plugins = 'dialogui,dialog,about,a11yhelp,basicstyles,blockquote,clipboard,panel,floatpanel,menu,contextmenu,resize,button,toolbar,elementspath,enterkey,entities,popup,filebrowser,floatingspace,listblock,richcombo,format,horizontalrule,htmlwriter,wysiwygarea,image,indent,indentlist,fakeobjects,link,list,magicline,maximize,pastetext,pastefromword,removeformat,showborders,sourcearea,specialchar,menubutton,scayt,stylescombo,tab,table,tabletools,undo,wsc,panelbutton,colorbutton,font,indentblock,lineheight,preview';
+    CKEDITOR.config.skin = 'bootstrapck';
     (function () {
         var setIcons = function (icons, strip) {
             var path = CKEDITOR.getUrl('plugins/' + strip);
@@ -17473,74 +17953,7 @@
                 bgsize: icons[++i]
             };
         };
-        if (CKEDITOR.env.hidpi) setIcons('about,0,,bold,24,,italic,48,,strike,72,,subscript,96,,superscript,120,,underline,144,,blockquote,168,,copy-rtl,192,,copy,216,,cut-rtl,240,,cut,264,,paste-rtl,288,,paste,312,,horizontalrule,336,,image,360,,indent-rtl,384,,indent,408,,outdent-rtl,432,,outdent,456,,anchor-rtl,480,,anchor,504,,link,528,,unlink,552,,bulletedlist-rtl,576,,bulletedlist,600,,numberedlist-rtl,624,,numberedlist,648,,maximize,672,,pastetext-rtl,696,,pastetext,720,,pastefromword-rtl,744,,pastefromword,768,,removeformat,792,,source-rtl,816,,source,840,,specialchar,864,,scayt,888,,table,912,,redo-rtl,936,,redo,960,,undo-rtl,984,,undo,1008,,spellchecker,1032,', 'icons_hidpi.png'); else setIcons('about,0,auto,bold,24,auto,italic,48,auto,strike,72,auto,subscript,96,auto,superscript,120,auto,underline,144,auto,blockquote,168,auto,copy-rtl,192,auto,copy,216,auto,cut-rtl,240,auto,cut,264,auto,paste-rtl,288,auto,paste,312,auto,horizontalrule,336,auto,image,360,auto,indent-rtl,384,auto,indent,408,auto,outdent-rtl,432,auto,outdent,456,auto,anchor-rtl,480,auto,anchor,504,auto,link,528,auto,unlink,552,auto,bulletedlist-rtl,576,auto,bulletedlist,600,auto,numberedlist-rtl,624,auto,numberedlist,648,auto,maximize,672,auto,pastetext-rtl,696,auto,pastetext,720,auto,pastefromword-rtl,744,auto,pastefromword,768,auto,removeformat,792,auto,source-rtl,816,auto,source,840,auto,specialchar,864,auto,scayt,888,auto,table,912,auto,redo-rtl,936,auto,redo,960,auto,undo-rtl,984,auto,undo,1008,auto,spellchecker,1032,auto', 'icons.png');
+        if (CKEDITOR.env.hidpi) setIcons('about,0,,bold,24,,italic,48,,strike,72,,subscript,96,,superscript,120,,underline,144,,blockquote,168,,copy-rtl,192,,copy,216,,cut-rtl,240,,cut,264,,paste-rtl,288,,paste,312,,horizontalrule,336,,image,360,,indent-rtl,384,,indent,408,,outdent-rtl,432,,outdent,456,,anchor-rtl,480,,anchor,504,,link,528,,unlink,552,,bulletedlist-rtl,576,,bulletedlist,600,,numberedlist-rtl,624,,numberedlist,648,,maximize,672,,pastetext-rtl,696,,pastetext,720,,pastefromword-rtl,744,,pastefromword,768,,removeformat,792,,source-rtl,816,,source,840,,specialchar,864,,scayt,888,,table,912,,redo-rtl,936,,redo,960,,undo-rtl,984,,undo,1008,,spellchecker,1032,,bgcolor,1056,,textcolor,1080,,preview-rtl,1104,,preview,1128,', 'icons_hidpi.png'); else setIcons('about,0,auto,bold,24,auto,italic,48,auto,strike,72,auto,subscript,96,auto,superscript,120,auto,underline,144,auto,blockquote,168,auto,copy-rtl,192,auto,copy,216,auto,cut-rtl,240,auto,cut,264,auto,paste-rtl,288,auto,paste,312,auto,horizontalrule,336,auto,image,360,auto,indent-rtl,384,auto,indent,408,auto,outdent-rtl,432,auto,outdent,456,auto,anchor-rtl,480,auto,anchor,504,auto,link,528,auto,unlink,552,auto,bulletedlist-rtl,576,auto,bulletedlist,600,auto,numberedlist-rtl,624,auto,numberedlist,648,auto,maximize,672,auto,pastetext-rtl,696,auto,pastetext,720,auto,pastefromword-rtl,744,auto,pastefromword,768,auto,removeformat,792,auto,source-rtl,816,auto,source,840,auto,specialchar,864,auto,scayt,888,auto,table,912,auto,redo-rtl,936,auto,redo,960,auto,undo-rtl,984,auto,undo,1008,auto,spellchecker,1032,auto,bgcolor,1056,auto,textcolor,1080,auto,preview-rtl,1104,auto,preview,1128,auto', 'icons.png');
     })();
-    CKEDITOR.lang.languages = {
-        "af": 1,
-        "sq": 1,
-        "ar": 1,
-        "eu": 1,
-        "bn": 1,
-        "bs": 1,
-        "bg": 1,
-        "ca": 1,
-        "zh-cn": 1,
-        "zh": 1,
-        "hr": 1,
-        "cs": 1,
-        "da": 1,
-        "nl": 1,
-        "en": 1,
-        "en-au": 1,
-        "en-ca": 1,
-        "en-gb": 1,
-        "eo": 1,
-        "et": 1,
-        "fo": 1,
-        "fi": 1,
-        "fr": 1,
-        "fr-ca": 1,
-        "gl": 1,
-        "ka": 1,
-        "de": 1,
-        "el": 1,
-        "gu": 1,
-        "he": 1,
-        "hi": 1,
-        "hu": 1,
-        "is": 1,
-        "id": 1,
-        "it": 1,
-        "ja": 1,
-        "km": 1,
-        "ko": 1,
-        "ku": 1,
-        "lv": 1,
-        "lt": 1,
-        "mk": 1,
-        "ms": 1,
-        "mn": 1,
-        "no": 1,
-        "nb": 1,
-        "fa": 1,
-        "pl": 1,
-        "pt-br": 1,
-        "pt": 1,
-        "ro": 1,
-        "ru": 1,
-        "sr": 1,
-        "sr-latn": 1,
-        "si": 1,
-        "sk": 1,
-        "sl": 1,
-        "es": 1,
-        "sv": 1,
-        "tt": 1,
-        "th": 1,
-        "tr": 1,
-        "ug": 1,
-        "uk": 1,
-        "vi": 1,
-        "cy": 1
-    };
+    CKEDITOR.lang.languages = {"zh-cn": 1, "en": 1};
 }());
